@@ -1,0 +1,12 @@
+
+''' Over view of how this projects work. '''
+A unique shareable url generate for user who join. Now the user can share the url. If anyone use that url to sign then this person
+is count as a friend of that person.
+So there are one model inside joins app. Take a look to realize.
+
+
+''' Things that, I learned from this project. '''
+1. Generate shareable unique url.
+2. Keep track who use that unique url to join.
+3. Get Ip address who joined.
+4. Use Django middleware to process the information before view

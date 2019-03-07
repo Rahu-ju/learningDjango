@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <form method="post" action="" class="needs-validation" novalidate>{% csrf_token %}
+    <div class="form-row">
+      <div class="col-md-4 mb-3">
+        <label for="validationCustom03"> Email</label>
+        {{ form.email }}
+        {% if form.errors.email %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ form.errors.email }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Join</button>
+  </form>
+{% endblock content %}

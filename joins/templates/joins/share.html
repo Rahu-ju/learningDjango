@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'joins/navbar.html' %}
+<div class="jumbotron">
+  <h4 class="">Your shareable link below</h4>
+  <p>We willl keep track all of your friends who uses your shared link</p>
+  <p class="lead"><a href="{{share_url}}">{{share_url}}</a></p>
+  <hr class="my-4">
+  <p>The number of your friends use your shared url, <button class="btn btn-outline-primary">{{friends_count}}</button></p>
+  <p>To see this page in future, here is the url.. <a href="{{page_url}}">{{page_url}}</a></p>
+  <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+</div>
+{% endblock content %}
