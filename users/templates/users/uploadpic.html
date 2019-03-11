@@ -1,0 +1,45 @@
+{% extends 'base.html'%}
+{% load bootstrap4 %}
+{% block content %}
+<div class="row">
+	<div class="col d-flex h-custom">
+	<!--content  -->
+	<div class="mx-auto my-auto" style="width: 50rem;">
+		<!--Card-->
+		<!-- <div class="card shadow" >
+			<div class="card-body">
+				<h5 class="card-title">Card title</h5>
+				<p class="card-text">Upload your beautiful smily headshot </p>
+					<form action="" id="form" method="post">
+						<div class="custom-file">
+							<label class="custom-file-label btn btn-outline-info" for="upload">Choose file</label>
+							<input type="file" class="custom-file-input"  id="upload">
+						</div>
+						<div id="upload-demo"></div>
+						<a href="#" class="upload-result">Send</a>
+					</form>
+			</div>
+		</div> -->
+
+
+		<div class="card shadow">
+			<div class="card-body">
+				<h5 class="card-title info text-center my-3">Upload  your beautiful face</h5>
+				<form action="{% url 'profile' %}" enctype="multipart/form-data" method="post" class="pic-upload-form" id="form">{% csrf_token %}
+					<div class="custom-file">
+						{% bootstrap_form form %}
+					</div>
+          <!-- Croppie area -->
+          <div id="upload-demo"></div>
+					<input type="hidden" id="image-data" name="imagebase64">
+          <button  type="button" class="btn btn-outline-info btn-custom upload-result">save</button>
+        </form>
+
+			</div>
+		</div>
+		<!--Card end-->
+	</div>
+	<!--content end  -->
+	</div>
+</div>
+{% endblock content%}

@@ -38,7 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #My apps
-    'joins'
+    'joins',
+    # Custom authentication app users
+    'users',
+    # Third party apps
+    'bootstrap4'
+
 ]
 
 MIDDLEWARE = [
@@ -130,3 +135,21 @@ STATICFILES_DIR = (
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media', 'media_root')
+
+# Custom user authentication purpose
+#Telling django to use custom User model
+AUTH_USER_MODEL = 'users.CustomUser'
+
+# Redirect url after login or logout
+LOGIN_REDIRECT_URL ='home'
+LOGOUT_REDIRECT_URL = 'home'
+
+# For password reset, change, forget etc you need to configure email backends
+# Email backends
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# to use email facilites from Google
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'squalporeover.ju@gmail.com'
+EMAIL_HOST_PASSWORD = 'google.ju@1'
+EMAIL_PORT = 587

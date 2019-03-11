@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{% block content %}
+<div class="row">
+  <div class="col d-flex h-custom">
+    <!--content  -->
+    <div class="mx-auto my-auto" style="width: 28rem;" >
+      <!--Card-->
+      <div class="card shadow text-center">
+        <div class="card-body">
+          <h3 class="card-title">Sign Up</h3>
+          <p class="card-text">This app help you to keep track your learing. <br>Signup with..</p>
+          <ul class="card-text d-inline-flex mr-3">
+            <li class="social-link facebook shadow rounded-circle"><i class="fab fa-facebook-f"></i></li>
+            <li class="social-link shadow twitter rounded-circle mx-4"><i class="fab fa-twitter"></i></li>
+            <li class="social-link shadow google rounded-circle"><i class="fab fa-google"></i></li>
+          </ul>
+          <p class="card-text">or be Classical</p>
+          <br><br>
+          <form action="" method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <button class="btn btn-outline-info btn-sign mt-3 shadow" type="submit">Signup</button>
+            <p class="card-text small red mt-2">Already have an account? <a class="red" href="{% url 'login' %}">Sign In</a></p>
+          </form>
+        </div>
+      </div>
+      <!-- Card end -->
+    </div>
+  <!-- content end -->
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+<!-- Load the bootstrap tag library -->
+{% load bootstrap4 %}
+{% block content %}
+
+<div class="row">
+
+  <div class="col">
+
+    <h3 class="text-center">Sign in to News</h3>
+    <div class="card mb-3   mx-auto w-25 shadow">
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-group">
+              {% bootstrap_form form %}
+          </div>
+          <button type="submit" class="btn btn-outline-success">Sign in</button>
+          <a class="float-right" href="{% url 'password_reset' %}">Forget Password?</a>
+        </form>
+      </div>
+    </div>
+    <p class="btn btn-block btn-outline-success w-25 mx-auto shadow">New to here?.<a href="{% url 'signup' %}" >Create an account</a></p>
+  </div>
+
+</div>
+
+
+
+{% endblock %}

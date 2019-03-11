@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{% block content %}
+<div class="row">
+  <div class="col d-flex h-custom">
+    <!-- content  -->
+    <div class="mx-auto my-auto" style="width: 50rem;" >
+
+      <!-- Card -->
+      <div class="card shadow">
+        <div class="card-body">
+          <h3 class="text-title info">Change your information</h3>
+          <h5 class="info">Password</h5>
+          <p>If you need to change your password , then change it securely via mail verification here. <a class="btn btn-outline-info btn-custom" href="{% url 'password_change' %}">Change</a></p>
+          <form action="" method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <button class="btn btn-outline-info btn-custom" type="submit">Save</button>
+          </form>
+        </div>
+      </div>
+      <!--Card end  -->
+
+    </div>
+    <!-- content end -->
+
+  </div>
+</div>
+{% endblock %}
