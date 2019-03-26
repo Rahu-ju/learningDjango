@@ -25,7 +25,7 @@ SECRET_KEY = 'a4_5j6a3@md!q-=3+1-jomqs@7crxhy7-_7kwo9i&!ylx@0vh@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,10 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #My apps
     'joins',
+    'products',
+
     # Custom authentication app users
     'users',
     # Third party apps
-    'bootstrap4'
+    'bootstrap4',
 
 ]
 

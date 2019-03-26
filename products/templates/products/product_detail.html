@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'navbar.html' %}
+  <div class="jumbotron">
+    <div class="row">
+      <!--product title and product image area  -->
+      <div class="col-sm-8">
+        <p>{{ object.title }}</p>
+        {% if object.productimage_set.count > 0 %}
+        <div>
+          {% for img in object.productimage_set.all %}
+           <img src="{{ img.image.url }}" alt="image is loaded">
+
+          {% endfor %}
+        </div>
+        {% endif %}
+        <p>{{ object.descripttion }}</p>
+      </div>
+
+      <!-- product price and variation area -->
+      <div class="col-sm-4">
+        <p id="price"></p>
+        <!--if product variation exist without default, then it shows those variations  -->
+            {% if object.variation_set.count > 1 %}
+              <select class="custom-select variation-select">
+                {% for vari in object.variation_set.all %}
+                  <option data-price={{vari.price}} value="{{ vari.id }}">{{ vari }}</option>
+                {% endfor %}
+
+              </select>
+            {% endif %}
+            <br>
+            <br>
+            <a href="" class="btn btn-outline-success">Add to Cart</a>
+            <p>Share on social media</p>
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"><i class="fab fa-facebook-f"></i></a>
+
+      </div>
+    </div>
+  </div>
+
+  
+
+{% endblock %}

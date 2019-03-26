@@ -16,7 +16,11 @@
       <li class="nav-item float-right">
         <a class="nav-link" href="{% url 'signup' %}">signup</a>
       </li>
-
+<!-- search form start -->
+      <form class="form-inline" method='GET' action="{% url 'products' %}">
+        <input type="text" class="form-control mb-2 mr-sm-2" placeholder="search" name='q'>
+      </form>
+<!-- search form end   -->
     </ul>
   </div>
 
