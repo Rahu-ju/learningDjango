@@ -15,9 +15,10 @@ So there are one model inside joins app. Take a look to realize.
 
 #..........................#............................#
 
-Product:
+Products:
 1. To save default variation of a product i learn use post_signal in the models.py
 2.
 3.
 4.
 5. Learn to search product using form, Q filter inside the product list view
+6. learn to implement product category model, categoey list view and category detail view

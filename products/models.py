@@ -21,10 +21,12 @@ class Product(models.Model):
     descripttion = models.TextField(blank=True, null=True)
     price = models.DecimalField(decimal_places=2, max_digits=60 )
     active = models.BooleanField(default=True)
+    categories = models.ManyToManyField('Category', blank=True)
+    default = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='product_category', blank=True, null=True)
     # Slug
     # Inventory
 
-    # Intanciate Product Manager, if you create custom model manager see above
+    # Intanciate Product Manager, if you create custom model manager see below
     # objects = ProductManager()
 
     def __str__(self):
@@ -79,4 +81,18 @@ def image_upload_to(instance, filename):
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     image = models.ImageField(upload_to=image_upload_to)
+
+
 # Product category
+class Category(models.Model):
+    title = models.CharField(max_length=120, unique=True)
+    slug = models.SlugField(unique=True)
+    description = models.TextField(blank=True, null=True)
+    active = models.BooleanField(default=True)
+    timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('category_detail', kwargs={'slug': self.slug})

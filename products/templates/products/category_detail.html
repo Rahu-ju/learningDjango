@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+  {% include 'navbar.html' %}
+  <div class="jumbotron">
+    <!--product list deoend on category  -->
+
+    <ul class="list-group">
+      {% if products %}
+        {% for product in products %}
+        <li class="list-group-item">{{product}}</li>
+        {% endfor %}
+      {% else %}
+        <li class="list-group-item">No product exists on this category </li>
+      {% endif %}
+    </ul>
+
+
+  </div>
+
+{% endblock content %}
