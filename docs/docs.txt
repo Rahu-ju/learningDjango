@@ -21,5 +21,5 @@ Products:
 3.
 4.
 5. Learn to search product using form, Q filter inside the product list view
-6. learn to implement product category model, categoey list view and category detail view
-7. related product showed in product detail page.. using Product model manager and get queryset in the product detail view.
+6. learn to implement product category model, category list view and category detail view
+7. related product showed in product detail page.. using Product model manager and get context data in the product detail view.
