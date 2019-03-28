@@ -9,12 +9,12 @@ from django.utils.text import slugify
 #         return self.filter(active=True)
 #
 #
-# class ProductManager(models.Manager):
-#     def get_query_set(self):
-#         return ProductQuerySet(self.model, self._db)
-#
-#     def all(self):
-#         return self.get_query_set().active()
+class ProductManager(models.Manager):
+    def get_related(self, instance):
+        product_one = self.get_queryset().filter(categories__in=instance.categories.all())
+        default = self.get_queryset().filter(default=instance.default)
+        qs = (product_one | default).exclude(id=instance.id).distinct()
+        return qs
 
 class Product(models.Model):
     title = models.CharField(max_length=120)
@@ -27,7 +27,7 @@ class Product(models.Model):
     # Inventory
 
     # Intanciate Product Manager, if you create custom model manager see below
-    # objects = ProductManager()
+    objects = ProductManager()
 
     def __str__(self):
         return self.title

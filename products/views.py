@@ -38,6 +38,12 @@ class ProductListView(ListView):
 class ProductDetailView(DetailView):
     model = Product
     # default template name 'appname/modelname_detail.html'
+    def get_context_data(self, *args, **kwargs):
+        context = super(ProductDetailView, self).get_context_data(*args, **kwargs)
+        instance = self.get_object()
+        related = Product.objects.get_related(instance)[:5]
+        context['related'] = related
+        return context
 
 # example of detail function base view
 def product_detail_view(request, id):

@@ -17,7 +17,7 @@
         <p>{{ object.descripttion }}</p>
       </div>
 
-      <!-- product price and variation area -->
+      <!-- product price and variation area, social, and related product area -->
       <div class="col-sm-4">
         <p id="price"></p>
         <!--if product variation exist without default, then it shows those variations  -->
@@ -34,11 +34,15 @@
             <a href="" class="btn btn-outline-success">Add to Cart</a>
             <p>Share on social media</p>
             <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"><i class="fab fa-facebook-f"></i></a>
-
+            <!--related product area  -->
+            <p>Related product</p>
+            {% for product in related %}
+              <a href="{{ product.get_absolute_url }}">{{product.title}}</a>
+            {% endfor %}
       </div>
     </div>
   </div>
 
-  
+
 
 {% endblock %}
