@@ -23,3 +23,4 @@ Products:
 5. Learn to search product using form, Q filter inside the product list view
 6. learn to implement product category model, category list view and category detail view
 7. related product showed in product detail page.. using Product model manager and get context data in the product detail view.
+8. get_img_url() method in product model and call it inth template means to show related product image.

@@ -37,7 +37,7 @@
             <!--related product area  -->
             <p>Related product</p>
             {% for product in related %}
-              <a href="{{ product.get_absolute_url }}">{{product.title}}</a>
+              <a href="{{ product.get_absolute_url }}"><img src="{{ product.get_img_url }}" class="rounded float-left ml-2" alt="" style="width:4rem;height:4rem;"></a>
             {% endfor %}
       </div>
     </div>
