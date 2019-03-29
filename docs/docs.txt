@@ -25,4 +25,4 @@ Products:
 7. related product showed in product detail page.. using Product model manager and get context data in the product detail view.
 8. get_img_url() method in product model and call it inth template means to show related product image.
 9. product featured models for featured products and show it in the template as slider.
-10. ProductImage and Variation model shown vertically  in the admin product add page.
+10. ProductImage and Variation model shown vertically  in the admin product add page. Which actually helpful to track every product.
