@@ -11,7 +11,7 @@ So there are one model inside joins app. Take a look to realize.
 1. Generate shareable unique url.
 2. Keep track who use that unique url to join.
 3. Get Ip address who joined.
-4. Use Django middleware to process the information before view
+4. Use Django middleware to process the information before viewd a
 
 #..........................#............................#
 
@@ -24,3 +24,4 @@ Products:
 6. learn to implement product category model, category list view and category detail view
 7. related product showed in product detail page.. using Product model manager and get context data in the product detail view.
 8. get_img_url() method in product model and call it inth template means to show related product image.
+9. product featured models for featured products.

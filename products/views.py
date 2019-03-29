@@ -4,7 +4,7 @@ from django.views.generic import DetailView, ListView
 from django.utils import timezone
 from django.db.models import Q
 
-from .models import Product, Category
+from .models import Product, Category, ProductFeatured
 
 # Create your views here.
 class ProductListView(ListView):
@@ -13,7 +13,9 @@ class ProductListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(ProductListView, self).get_context_data(*args, **kwargs)
+        featured_products = ProductFeatured.objects.all()
         context['now'] = timezone.now()
+        context['featured_products'] = featured_products
         return context
 
     def get_queryset(self, *args, **kwargs):

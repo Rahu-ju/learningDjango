@@ -102,3 +102,25 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return reverse('category_detail', kwargs={'slug': self.slug})
+
+
+# Featured product
+def upload_to_feature(instance, filename):
+    title = instance.product.title
+    slug =slugify(title)
+    basename, extention = filename.split(".")
+    new_filename = "%s-%s.%s" % (slug, instance.id, extention)
+    return "products/featured/%s/%s" % (slug, new_filename)
+
+class ProductFeatured(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=upload_to_feature)
+    title = models.CharField(max_length=120, blank=True, null=True)
+    text = models.TextField(max_length=200, blank=True, null=True)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.product.title
+
+    def get_absolute_url(self):
+        return self.product.get_absolute_url()
