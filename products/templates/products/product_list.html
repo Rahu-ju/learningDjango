@@ -26,13 +26,25 @@
     </a>
   </div>
   <!--Featured image slider end  -->
-  <table class="table">
+  <!--All products start  -->
+  {% for object in object_list %}
+  <div class="card float-left ml-2 mt-2" style="width: 18rem;">
+    <a href="{{ object.get_absolute_url }}"><img class="card-img-top" src="{{ object.get_img_url }}" alt="Card image cap"></a>
+    <div class="card-body">
+      <a href="{{ object.get_absolute_url }}"><p class="card-text">{{ object.title }}</p></a>
+    </div>
+  </div>
+  {% endfor %}
+
+
+  <!-- <table class="table">
     {% for object in object_list %}
     <tr>
       <td><a href="{{ object.get_absolute_url }}">{{object.title}}</a></td>
     </tr>
     {% endfor %}
-  </table>
+  </table> -->
+  <!--All product end  -->
 {% endblock content %}
 
 {% block jquery %}

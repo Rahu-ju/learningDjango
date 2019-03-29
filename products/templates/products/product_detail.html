@@ -37,7 +37,14 @@
             <!--related product area  -->
             <p>Related product</p>
             {% for product in related %}
-              <a href="{{ product.get_absolute_url }}"><img src="{{ product.get_img_url }}" class="rounded float-left ml-2" alt="" style="width:4rem;height:4rem;"></a>
+            <div class="card float-left ml-2 mt-2" style="width: 8rem;">
+              <a href="{{ product.get_absolute_url }}"><img class="card-img-top" src="{{ product.get_img_url }}" alt="Card image cap"></a>
+              <div class="card-body">
+                <a href="{{ product.get_absolute_url }}"><p class="card-text">{{ product.title }}</p></a>
+              </div>
+            </div>
+
+              <!-- <a href="{{ product.get_absolute_url }}"><img src="{{ product.get_img_url }}" class="rounded float-left ml-2" alt="" style="width:4rem;height:4rem;"><p>{{ product.title }}</p></a> -->
             {% endfor %}
       </div>
     </div>
