@@ -19,16 +19,20 @@ from django.conf.urls.static import static
 from django.urls import path, include
 from django.views.generic import TemplateView
 
+from carts.views import CartView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # For joins apps
+    # For joins app
     path('join', include('joins.urls')),
     # Home page
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
-    # user apps
+    # user app
     path('user/', include('users.urls')),
-    # Product apps
+    # Product app
     path('product/', include('products.urls')),
     path('category/', include('products.urls_category')),
+    # Cart app
+    path('cart/', CartView.as_view(), name='cart'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
