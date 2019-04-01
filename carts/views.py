@@ -36,7 +36,7 @@ class CartView(SingleObjectMixin, View):
         # Finally create CartItem instance then save it. and redirect to home page.
 
         item_id = request.GET.get('item')
-        qty = request.GET.get('qty')
+        qty = request.GET.get('qty', 1)
         delete_item = request.GET.get("delete")
 
         cart = self.get_object()

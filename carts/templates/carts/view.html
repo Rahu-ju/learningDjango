@@ -1,7 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
 {% include 'navbar.html' %}
-{{ object }}
-
-{{ object.items.all }}
+<br>
+<h5>All the product on your cart</h5><br>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">No. of products</th>
+      <th scope="col">Product name</th>
+      <th scope="col">Variation</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Remove</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in object.cartitem_set.all %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ item.get_product_title }}</td>
+      <td>{{ item.get_variation_title }}</td>
+      <td>{{ item.quantity }}</td>
+      <td>remove</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock content %}

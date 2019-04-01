@@ -12,6 +12,12 @@ class CartItem(models.Model):
     def __str__(self):
         return self.item.title
 
+    def get_product_title(self):
+        return self.item.product.title
+        
+    def get_variation_title(self):
+        return self.item.title
+
 class Cart(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
     items = models.ManyToManyField(Variation, through=CartItem)
@@ -20,6 +26,7 @@ class Cart(models.Model):
 
     def __str__(self):
         return str(self.id)
+
     # users
     # item
     # timestamp **created

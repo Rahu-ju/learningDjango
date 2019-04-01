@@ -19,19 +19,29 @@
 
       <!-- product price and variation area, social, and related product area -->
       <div class="col-sm-4">
-        <p id="price"></p>
+        <!--coming price from selected variation using jquery below  -->
+
         <!--if product variation exist without default, then it shows those variations  -->
+        <form method="GET" action="{% url 'cart' %}">
             {% if object.variation_set.count > 1 %}
-              <select class="custom-select variation-select">
+              <p id="price"></p>
+              <select name="item" class="custom-select variation-select form-control"">
                 {% for vari in object.variation_set.all %}
                   <option data-price={{vari.price}} value="{{ vari.id }}">{{ vari }}</option>
                 {% endfor %}
-
               </select>
+              <p class="mt-2">Quntity</p>
+              <input type="number" class="form-control" name="qty" value="1">
+            {% else %}
+              <p>Price {{ object.variation_set.first.price }}</p>
+              <input type="hidden" name="item" value="{{ object.variation_set.first.id }}">
+              <input type="number" class="form-control" name="qty" value="1">
             {% endif %}
             <br>
             <br>
-            <a href="" class="btn btn-outline-success">Add to Cart</a>
+            <input type="submit" class="btn btn-outline-success" value="Add to Cart">
+        </form>
+
             <p>Share on social media</p>
             <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"><i class="fab fa-facebook-f"></i></a>
             <!--related product area  -->
@@ -52,4 +62,21 @@
 
 
 
+{% endblock %}
+
+{% block jquery %}
+<script>
+
+  // show the default variation price
+  var price = $(".variation-select option:selected").attr('data-price')
+  $("#price").text("Price ".concat(String(price)));
+
+  // for changing the variation the price change accordingly
+  $(".variation-select").change(function(){
+    var price = $(".variation-select option:selected").attr('data-price')
+    $("#price").text("Price ".concat(String(price)));
+  })
+
+
+</script>
 {% endblock %}
