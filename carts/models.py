@@ -14,9 +14,12 @@ class CartItem(models.Model):
 
     def get_product_title(self):
         return self.item.product.title
-        
+
     def get_variation_title(self):
         return self.item.title
+
+    def remove(self):
+        return self.item.remove_from_cart()
 
 class Cart(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)

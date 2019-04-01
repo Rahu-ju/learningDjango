@@ -20,7 +20,7 @@
       <td>{{ item.get_product_title }}</td>
       <td>{{ item.get_variation_title }}</td>
       <td>{{ item.quantity }}</td>
-      <td>remove</td>
+      <td><a href="{{ item.remove }}">X</a></td>
     </tr>
     {% endfor %}
   </tbody>

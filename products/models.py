@@ -61,6 +61,9 @@ class Variation(models.Model):
     def get_absolute_url(self):
         return self.product.get_absolute_url()
 
+    def remove_from_cart(self):
+        return "%s?item=%s&qty=1&delete=True" % (reverse("cart"), self.id)
+
 # Save the default variation when the Product model is saved
 def product_post_save_recevier(sender, instance, created, *args, **kwargs):
     print(sender, instance, created)
