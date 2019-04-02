@@ -10,6 +10,7 @@
       <th scope="col">Product name</th>
       <th scope="col">Variation</th>
       <th scope="col">Quantity</th>
+      <th scope="col">Price</th>
       <th scope="col" class="text-right">Remove</th>
     </tr>
   </thead>
@@ -25,6 +26,7 @@
            <input type="number" name="qty" value="{{ item.quantity }}" class="item-qty">
            <input type="submit" value="update item" style="display:none;" class="btn-update">
          </td>
+         <td>{{ item.line_item_total }}</td>
         <td class="text-right"><a href="{{ item.remove }}">X</a></td>
       </form>
     </tr>
