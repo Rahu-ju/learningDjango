@@ -10,19 +10,32 @@
       <th scope="col">Product name</th>
       <th scope="col">Variation</th>
       <th scope="col">Quantity</th>
-      <th scope="col">Remove</th>
+      <th scope="col" class="text-right">Remove</th>
     </tr>
   </thead>
   <tbody>
     {% for item in object.cartitem_set.all %}
     <tr>
-      <th scope="row">{{ forloop.counter }}</th>
-      <td>{{ item.get_product_title }}</td>
-      <td>{{ item.get_variation_title }}</td>
-      <td>{{ item.quantity }}</td>
-      <td><a href="{{ item.remove }}">X</a></td>
+      <form action="." method="GET">
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ item.get_product_title }}</td>
+        <td>{{ item.get_variation_title }}</td>
+        <td>
+           <input type="hidden" name="item" value="{{ item.item.id }}">
+           <input type="number" name="qty" value="{{ item.quantity }}" class="item-qty">
+           <input type="submit" value="update item" style="display:none;" class="btn-update">
+         </td>
+        <td class="text-right"><a href="{{ item.remove }}">X</a></td>
+      </form>
     </tr>
     {% endfor %}
   </tbody>
 </table>
 {% endblock content %}
+{% block jquery %}
+<script>
+$(".item-qty").click(function(){
+  $(this).next(".btn-update").fadeIn();
+});
+</script>
+{% endblock %}
