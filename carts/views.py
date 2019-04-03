@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.views.generic.base import View
 from django.views.generic.detail import SingleObjectMixin
 
@@ -49,6 +49,9 @@ class CartView(SingleObjectMixin, View):
             else:
                 cart_item.quantity = qty
                 cart_item.save()
+        if request.is_ajax():
+            return JsonResponse({"success": True})
+
         context ={"object": self.get_object(),}
         template = self.template_name
         return render(request, template, context)

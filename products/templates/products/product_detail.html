@@ -22,7 +22,7 @@
         <!--coming price from selected variation using jquery below  -->
 
         <!--if product variation exist without default, then it shows those variations  -->
-        <form method="GET" action="{% url 'cart' %}">
+        <form id="form-product-detail" method="GET" action="{% url 'cart' %}">
             {% if object.variation_set.count > 1 %}
               <p id="price"></p>
               <select name="item" class="custom-select variation-select form-control"">
@@ -39,7 +39,7 @@
             {% endif %}
             <br>
             <br>
-            <input type="submit" class="btn btn-outline-success" value="Add to Cart">
+            <input id="submit-button" type="submit" class="btn btn-outline-success" value="Add to Cart">
         </form>
 
             <p>Share on social media</p>
@@ -75,7 +75,26 @@
   $(".variation-select").change(function(){
     var price = $(".variation-select option:selected").attr('data-price')
     $("#price").text("Price ".concat(String(price)));
-  })
+  });
+
+  // Ajax form submission
+  $("#submit-button").click(function(event){
+    event.preventDefault();
+    var formData = $("#form-product-detail").serialize();
+    console.log(formData);
+    $.ajax({
+      type: "GET",
+      url: "{% url "cart" %}",
+      data: formData,
+      success:function(data){
+        console.log(data);
+      },
+      error:function(response, error){
+        console.log(response);
+        console.log(error);
+      },
+    });
+  });
 
 
 </script>
