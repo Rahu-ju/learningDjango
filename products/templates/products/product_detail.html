@@ -77,24 +77,24 @@
     $("#price").text("Price ".concat(String(price)));
   });
 
-  // Ajax form submission
-  $("#submit-button").click(function(event){
-    event.preventDefault();
-    var formData = $("#form-product-detail").serialize();
-    console.log(formData);
-    $.ajax({
-      type: "GET",
-      url: "{% url "cart" %}",
-      data: formData,
-      success:function(data){
-        console.log(data);
-      },
-      error:function(response, error){
-        console.log(response);
-        console.log(error);
-      },
-    });
-  });
+  // Ajax form submission when click add to cart button
+  // $("#submit-button").click(function(event){
+  //   event.preventDefault();
+  //   var formData = $("#form-product-detail").serialize();
+  //   console.log(formData);
+  //   $.ajax({
+  //     type: "GET",
+  //     url: "{% url "cart" %}",
+  //     data: formData,
+  //     success:function(data){
+  //       console.log(data);
+  //     },
+  //     error:function(response, error){
+  //       console.log(response);
+  //       console.log(error);
+  //     },
+  //   });
+  // });
 
 
 </script>

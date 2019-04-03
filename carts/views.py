@@ -39,9 +39,9 @@ class CartView(SingleObjectMixin, View):
         qty = request.GET.get('qty', 1)
         delete_item = request.GET.get("delete")
 
-        cart = self.get_object()
         if item_id:
             item_instance = get_object_or_404(Variation, id=item_id)
+            cart = self.get_object()
             cart_item = CartItem.objects.get_or_create(cart=cart, item=item_instance)[0]
 
             if delete_item:
@@ -49,9 +49,9 @@ class CartView(SingleObjectMixin, View):
             else:
                 cart_item.quantity = qty
                 cart_item.save()
-        if request.is_ajax():
-            return JsonResponse({"success": True})
+        # if request.is_ajax():
+        #     return JsonResponse({"success": True})
 
-        context ={"object": self.get_object(),}
+        context ={"object": self.get_object()}
         template = self.template_name
         return render(request, template, context)

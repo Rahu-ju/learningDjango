@@ -76,6 +76,7 @@ def product_post_save_recevier(sender, instance, created, *args, **kwargs):
         new_var.title = "Default"
         new_var.price = product.price
         new_var.save()
+
 post_save.connect(product_post_save_recevier, sender=Product)
 
 

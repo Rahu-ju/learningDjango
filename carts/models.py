@@ -13,6 +13,7 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     line_item_total = models.DecimalField(max_digits=10, decimal_places=2)
 
+    print(line_item_total)
     def __str__(self):
         return self.item.title
 
@@ -31,13 +32,12 @@ def cart_item_pre_save_receiver(sender, instance, *args, **kwargs):
     price = instance.item.get_price()
     line_item_total = Decimal(qty) * Decimal(price)
     instance.line_item_total = line_item_total
-
 pre_save.connect(cart_item_pre_save_receiver, sender=CartItem)
+
 
 # Calculate the subtotal after the cart item save (post save signal)
 def cart_item_post_save_receiver(sender, instance, *args, **kwargs):
     instance.cart.update_subtotal()
-
 post_save.connect(cart_item_post_save_receiver, sender=CartItem)
 
 # If any cart item remove from cart then its call to update the subtotal again.
