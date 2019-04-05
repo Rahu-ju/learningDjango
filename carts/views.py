@@ -38,19 +38,30 @@ class CartView(SingleObjectMixin, View):
         item_id = request.GET.get('item')
         qty = request.GET.get('qty', 1)
         delete_item = request.GET.get("delete")
-
+        item_added = False
+        cart = self.get_object()
         if item_id:
             item_instance = get_object_or_404(Variation, id=item_id)
-            cart = self.get_object()
-            cart_item = CartItem.objects.get_or_create(cart=cart, item=item_instance)[0]
+            cart_item, created = CartItem.objects.get_or_create(cart=cart, item=item_instance)
+            if created:
+                item_added = True
 
+            # if qyt is less than 1 then it should delete the cart item. security purpose
+            try:
+                if int(qty) < 1:
+                    delete_item = True
+            except:
+                raise Http404
+
+            # Delete the cart item
             if delete_item:
                 cart_item.delete()
             else:
                 cart_item.quantity = qty
                 cart_item.save()
-        # if request.is_ajax():
-        #     return JsonResponse({"success": True})
+
+        if request.is_ajax():
+            return JsonResponse({"deleted": delete_item, "item_added": item_added})
 
         context ={"object": self.get_object()}
         template = self.template_name

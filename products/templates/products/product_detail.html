@@ -23,6 +23,7 @@
 
         <!--if product variation exist without default, then it shows those variations  -->
         <form id="form-product-detail" method="GET" action="{% url 'cart' %}">
+            <p id="jquery-message"></p>
             {% if object.variation_set.count > 1 %}
               <p id="price"></p>
               <select name="item" class="custom-select variation-select form-control"">
@@ -78,23 +79,24 @@
   });
 
   // Ajax form submission when click add to cart button
-  // $("#submit-button").click(function(event){
-  //   event.preventDefault();
-  //   var formData = $("#form-product-detail").serialize();
-  //   console.log(formData);
-  //   $.ajax({
-  //     type: "GET",
-  //     url: "{% url "cart" %}",
-  //     data: formData,
-  //     success:function(data){
-  //       console.log(data);
-  //     },
-  //     error:function(response, error){
-  //       console.log(response);
-  //       console.log(error);
-  //     },
-  //   });
-  // });
+  $("#submit-button").click(function(event){
+    event.preventDefault();
+    var formData = $("#form-product-detail").serialize();
+    console.log(formData);
+    $.ajax({
+      type: "GET",
+      url: "{% url "cart" %}",
+      data: formData,
+      success:function(data){
+        console.log(data);
+        $("#jquery-message").text("added " + data.item_added + " deleted " + data.deleted)
+      },
+      error:function(response, error){
+        console.log(response);
+        console.log(error);
+      }
+    });
+  });
 
 
 </script>
