@@ -17,18 +17,20 @@
   <tbody>
     {% for item in object.cartitem_set.all %}
     <tr>
-      <form action="." method="GET">
+
         <th scope="row">{{ forloop.counter }}</th>
         <td>{{ item.get_product_title }}</td>
         <td>{{ item.get_variation_title }}</td>
         <td>
-           <input type="hidden" name="item" value="{{ item.item.id }}">
-           <input type="number" name="qty" value="{{ item.quantity }}" class="item-qty">
-           <input type="submit" value="update item" style="display:none;" class="btn-update">
+          <form id="cart-quantity"action="." method="GET">
+             <input type="hidden" name="item" value="{{ item.item.id }}">
+             <input type="number" name="qty" value="{{ item.quantity }}" class="item-qty">
+             <!-- <input type="submit" value="update item" style="display:none;" class="btn-update"> -->
+          </form>
          </td>
-         <td class="text-right">{{ item.line_item_total }}</td>
+         <td id="item-{{item.item.id}}" class="text-right">{{ item.line_item_total }}</td>
         <td class="text-right"><a href="{{ item.remove }}"><i class="far fa-trash-alt"></i></a></td>
-      </form>
+
     </tr>
     {% endfor %}
 
@@ -37,7 +39,7 @@
       <td></td>
       <td></td>
       <td></td>
-      <td class="text-right">Subtotal: {{ object.subtotal }}</td>
+      <td id="subtotal" class="text-right">Subtotal: {{ object.subtotal }}</td>
       <td></td>
     </tr>
   </tbody>
@@ -48,5 +50,37 @@
 $(".item-qty").click(function(){
   $(this).next(".btn-update").fadeIn();
 });
+
+// Ajax functionality to for auto updating quaity, line total, Subtotal
+$(".item-qty").change(function(event){
+  event.preventDefault();
+  var item = $(this).prev("input[type=hidden]").val()
+  var qty = $(this).val()
+  console.log(item, qty);
+
+// you can also use the serialize function to serialize the form data.
+// the below serialize function do the same thing as the above.
+  // var formData = $("#cart-quantity").serialize();
+  // console.log(formData)
+
+  $.ajax({
+    type: "GET",
+    url: {% url "cart" %},
+    data:{
+      item: item,
+      qty:qty,
+    },
+
+    success:function(data){
+      console.log(data);
+      $("#subtotal").text(data.subtotal)
+      $("#item-"+item).text(data.line_total)
+    },
+    error:function(response,error){
+      console.log(response);
+      console.log(error);
+    }
+  });
+})
 </script>
 {% endblock %}

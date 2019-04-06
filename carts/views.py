@@ -61,7 +61,23 @@ class CartView(SingleObjectMixin, View):
                 cart_item.save()
 
         if request.is_ajax():
-            return JsonResponse({"deleted": delete_item, "item_added": item_added})
+            # Checking the line total
+            try:
+                line_total = cart_item.line_item_total
+            except:
+                line_total = None
+
+            # Checking the subtotal
+            try:
+                subtotal = cart_item.cart.subtotal
+            except:
+                subtotal = None
+
+            return JsonResponse({
+                "line_total": line_total,
+                "subtotal": subtotal,
+                "delete": delete_item
+            })
 
         context ={"object": self.get_object()}
         template = self.template_name
