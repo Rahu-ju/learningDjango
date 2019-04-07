@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
 from django.http import HttpResponseRedirect, JsonResponse
 from django.views.generic.base import View
 from django.views.generic.detail import SingleObjectMixin
@@ -59,6 +60,9 @@ class CartView(SingleObjectMixin, View):
             else:
                 cart_item.quantity = qty
                 cart_item.save()
+
+            if not request.is_ajax():
+                return HttpResponseRedirect(reverse("cart"))
 
         if request.is_ajax():
             # Checking the line total

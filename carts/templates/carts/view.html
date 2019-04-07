@@ -16,7 +16,7 @@
   </thead>
   <tbody>
     {% for item in object.cartitem_set.all %}
-    <tr>
+    <tr id="row-{{item.item.id}}">
 
         <th scope="row">{{ forloop.counter }}</th>
         <td>{{ item.get_product_title }}</td>
@@ -28,8 +28,8 @@
              <!-- <input type="submit" value="update item" style="display:none;" class="btn-update"> -->
           </form>
          </td>
-         <td id="item-{{item.item.id}}" class="text-right">{{ item.line_item_total }}</td>
-        <td class="text-right"><a href="{{ item.remove }}"><i class="far fa-trash-alt"></i></a></td>
+         <td id="item-{{ item.item.id }}" class="text-right">{{ item.line_item_total }}</td>
+        <td id="remove-{{ item.item.id }}"class="text-right delete-item"><a href="{{ item.remove }}"><i class="far fa-trash-alt"></i></a></td>
 
     </tr>
     {% endfor %}
@@ -47,9 +47,10 @@
 {% endblock content %}
 {% block jquery %}
 <script>
-$(".item-qty").click(function(){
-  $(this).next(".btn-update").fadeIn();
-});
+//When click the quantity form it shows the update button
+// $(".item-qty").click(function(){
+//   $(this).next(".btn-update").fadeIn();
+// });
 
 // Ajax functionality to for auto updating quaity, line total, Subtotal
 $(".item-qty").change(function(event){
@@ -73,8 +74,13 @@ $(".item-qty").change(function(event){
 
     success:function(data){
       console.log(data);
-      $("#subtotal").text(data.subtotal)
-      $("#item-"+item).text(data.line_total)
+      if (data.delete_item){
+        $("#row-"+item).fadeOut();
+      } else {
+        $("#subtotal").text(data.subtotal);
+        $("#item-"+item).text(data.line_total);
+      };
+
     },
     error:function(response,error){
       console.log(response);
@@ -82,5 +88,6 @@ $(".item-qty").change(function(event){
     }
   });
 })
+
 </script>
 {% endblock %}
