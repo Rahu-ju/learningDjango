@@ -91,7 +91,8 @@
       data: formData,
       success:function(data){
         console.log(data);
-        ShowFlashMessage("Added to the cart.");
+        // show the flash message.
+        ShowFlashMessage(data.flash_message);
       },
       error:function(response, error){
         console.log(response);

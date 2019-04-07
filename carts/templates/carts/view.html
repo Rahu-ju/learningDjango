@@ -80,7 +80,8 @@ $(".item-qty").change(function(event){
         $("#subtotal").text(data.subtotal);
         $("#item-"+item).text(data.line_total);
       };
-      ShowFlashMessage("cart updated.")
+      // show the flash mesage
+      ShowFlashMessage(data.flash_message)
     },
     error:function(response,error){
       console.log(response);

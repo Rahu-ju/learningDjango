@@ -46,17 +46,22 @@ class CartView(SingleObjectMixin, View):
             cart_item, created = CartItem.objects.get_or_create(cart=cart, item=item_instance)
             if created:
                 item_added = True
+                flash_message = "Successfully added to the cart."
+            if not created:
+                flash_message = "Quantity successfully updated."
 
             # if qyt is less than 1 then it should delete the cart item. security purpose
             try:
                 if int(qty) < 1:
                     delete_item = True
+                    flash_message = "Item removed successfully."
             except:
                 raise Http404
 
             # Delete the cart item
             if delete_item:
                 cart_item.delete()
+                flash_message = "Item removed successfully."
             else:
                 cart_item.quantity = qty
                 cart_item.save()
@@ -80,7 +85,8 @@ class CartView(SingleObjectMixin, View):
             return JsonResponse({
                 "line_total": line_total,
                 "subtotal": subtotal,
-                "delete": delete_item
+                "delete": delete_item,
+                "flash_message": flash_message
             })
 
         context ={"object": self.get_object()}
