@@ -1,0 +1,9 @@
+/* .....for flash message.... */
+.container-alert-flash{
+  position: absolute;
+  z-index: 5000;
+  top: 30px;
+  width: 100%;
+  right: 0px;
+  margin: 0px;
+}

@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
 {% include 'navbar.html' %}
+
+
   <div class="jumbotron">
     <div class="row">
       <!--product title and product image area  -->
@@ -89,7 +91,7 @@
       data: formData,
       success:function(data){
         console.log(data);
-        $("#jquery-message").text("added " + data.item_added + " deleted " + data.deleted)
+        ShowFlashMessage("Added to the cart.");
       },
       error:function(response, error){
         console.log(response);
