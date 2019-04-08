@@ -31,34 +31,47 @@ class CartView(SingleObjectMixin, View):
         return cart
 
     def get(self, request, *args, **kwargs):
-        # It takes item, qty(quanty), delete from the ulr
-        # then retrive the item instance from variation model,
-        # create cart instane and then
-        # Finally create CartItem instance then save it. and redirect to home page.
+        # get item_id, qty and delete_item from the url
 
+        # then Create the variation instance from item_id
+        # create the cart instance
+        # then create the cartItem instance from those
+
+        # now show the flash message if
+        # new cart item is create or
+        # quantity is update or not
+
+        # now checking if it is requested to delete the cart item or not.
+        # at last save the cart item.
+
+        # get parameter from url
         item_id = request.GET.get('item')
         qty = request.GET.get('qty', 1)
         delete_item = request.GET.get("delete")
-        item_added = False
-        cart = self.get_object()
+
         if item_id:
+            # Creating instance area
             item_instance = get_object_or_404(Variation, id=item_id)
+            cart = self.get_object()
             cart_item, created = CartItem.objects.get_or_create(cart=cart, item=item_instance)
+
+            # flash message for create new cart item or update quantity or not.
             if created:
-                item_added = True
                 flash_message = "Successfully added to the cart."
-            if not created:
-                flash_message = "Quantity successfully updated."
+            else:
+                if cart_item.quantity == int(qty):
+                    flash_message = "This product already added to cart."
+                else:
+                    flash_message = "Quantity successfully updated."
 
             # if qyt is less than 1 then it should delete the cart item. security purpose
             try:
                 if int(qty) < 1:
                     delete_item = True
-                    flash_message = "Item removed successfully."
             except:
                 raise Http404
 
-            # Delete the cart item
+            # delete the cartItem if it is requested to delete.
             if delete_item:
                 cart_item.delete()
                 flash_message = "Item removed successfully."
@@ -70,7 +83,9 @@ class CartView(SingleObjectMixin, View):
                 return HttpResponseRedirect(reverse("cart"))
 
         if request.is_ajax():
-            # Checking the line total
+            # For ajax response it retrive
+            # line_item_total and subtotal
+            # and take flash message.
             try:
                 line_total = cart_item.line_item_total
             except:
