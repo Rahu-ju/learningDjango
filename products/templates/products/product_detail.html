@@ -93,6 +93,8 @@
         console.log(data);
         // show the flash message.
         ShowFlashMessage(data.flash_message);
+        // update cart items in the navbar
+        updateCartItemCount();
       },
       error:function(response, error){
         console.log(response);

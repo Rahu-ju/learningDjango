@@ -29,6 +29,9 @@
         <input type="text" class="form-control mb-2 mr-sm-2" placeholder="search" name='q'>
       </form>
 <!-- search form end   -->
+      <li class="nav-item float-right">
+        <a class="nav-link" href="{% url 'cart' %}">cart <span id="cart_item_badge" class="badge">{{ request.session.cart_item_count }}</span></a>
+      </li>
     </ul>
   </div>
 

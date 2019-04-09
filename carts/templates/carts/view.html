@@ -3,7 +3,15 @@
 {% include 'navbar.html' %}
 <br>
 {% if object.cartitem_set.count < 1 %}
-  <p>Your cart is empty</p>
+<div class="container">
+  <div class="row">
+    <div class="col text-center">
+      <h4 class="">Your cart is empty</h4>
+      <a href="{% url "products" %}">Continue Shopping</a>
+    </div>
+  </div>
+</div>
+
 {% else %}
   <h5>All the product on your cart</h5><br>
   <table class="table">
@@ -32,7 +40,7 @@
             </form>
            </td>
            <td id="item-{{ item.item.id }}" class="text-right">{{ item.line_item_total }}</td>
-          <td id="remove-{{ item.item.id }}"class="text-right delete-item"><a href="{{ item.remove }}"><i class="far fa-trash-alt"></i></a></td>
+          <td id="{{ item.item.id }}"class="text-right delete-item"><a href="{{ item.remove }}"><i class="far fa-trash-alt"></i></a></td>
 
       </tr>
       {% endfor %}
@@ -95,6 +103,5 @@ $(".item-qty").change(function(event){
     }
   });
 })
-
 </script>
 {% endblock %}

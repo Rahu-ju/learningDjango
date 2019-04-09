@@ -19,7 +19,7 @@ from django.conf.urls.static import static
 from django.urls import path, include
 from django.views.generic import TemplateView
 
-from carts.views import CartView
+from carts.views import CartView, CartItemCountView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,5 +34,6 @@ urlpatterns = [
     path('category/', include('products.urls_category')),
     # Cart app
     path('cart/', CartView.as_view(), name='cart'),
+    path('cart/count', CartItemCountView.as_view(), name='item_count'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
