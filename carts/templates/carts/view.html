@@ -2,48 +2,54 @@
 {% block content %}
 {% include 'navbar.html' %}
 <br>
-<h5>All the product on your cart</h5><br>
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">No. of products</th>
-      <th scope="col">Product name</th>
-      <th scope="col">Variation</th>
-      <th scope="col">Quantity</th>
-      <th scope="col" class="text-right">Price</th>
-      <th scope="col" class="text-right">Remove</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for item in object.cartitem_set.all %}
-    <tr id="row-{{item.item.id}}">
+{% if object.cartitem_set.count < 1 %}
+  <p>Your cart is empty</p>
+{% else %}
+  <h5>All the product on your cart</h5><br>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">No. of products</th>
+        <th scope="col">Product name</th>
+        <th scope="col">Variation</th>
+        <th scope="col">Quantity</th>
+        <th scope="col" class="text-right">Price</th>
+        <th scope="col" class="text-right">Remove</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in object.cartitem_set.all %}
+      <tr id="row-{{item.item.id}}">
 
-        <th scope="row">{{ forloop.counter }}</th>
-        <td>{{ item.get_product_title }}</td>
-        <td>{{ item.get_variation_title }}</td>
-        <td>
-          <form id="cart-quantity"action="." method="GET">
-             <input type="hidden" name="item" value="{{ item.item.id }}">
-             <input type="number" name="qty" value="{{ item.quantity }}" class="item-qty">
-             <!-- <input type="submit" value="update item" style="display:none;" class="btn-update"> -->
-          </form>
-         </td>
-         <td id="item-{{ item.item.id }}" class="text-right">{{ item.line_item_total }}</td>
-        <td id="remove-{{ item.item.id }}"class="text-right delete-item"><a href="{{ item.remove }}"><i class="far fa-trash-alt"></i></a></td>
+          <th scope="row">{{ forloop.counter }}</th>
+          <td>{{ item.get_product_title }}</td>
+          <td>{{ item.get_variation_title }}</td>
+          <td>
+            <form id="cart-quantity"action="." method="GET">
+               <input type="hidden" name="item" value="{{ item.item.id }}">
+               <input type="number" name="qty" value="{{ item.quantity }}" class="item-qty">
+               <!-- <input type="submit" value="update item" style="display:none;" class="btn-update"> -->
+            </form>
+           </td>
+           <td id="item-{{ item.item.id }}" class="text-right">{{ item.line_item_total }}</td>
+          <td id="remove-{{ item.item.id }}"class="text-right delete-item"><a href="{{ item.remove }}"><i class="far fa-trash-alt"></i></a></td>
 
-    </tr>
-    {% endfor %}
+      </tr>
+      {% endfor %}
 
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td id="subtotal" class="text-right">Subtotal: {{ object.subtotal }}</td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td id="subtotal" class="text-right">Subtotal: {{ object.subtotal }}</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+{% endif %}
+
+
 {% endblock content %}
 {% block jquery %}
 <script>
