@@ -10,11 +10,14 @@ function ShowFlashMessage(message){
   }, 1800);
 }
 
-// Show cart item in navbar
+// Show cart item in navbar using ajax
 function updateCartItemCount(){
+  // Django template tag is not recognise inside js
+  // ie. we get the data-url attribute that is actually {% url "item_count" %} in the navbar template
+  var url = $("#cart_item_badge").attr("data-url");
   $.ajax({
     type: "GET",
-    url: "http://127.0.0.1:8000/cart/count",
+    url: url,
     success:function(data){
       console.log(data.cart_item);
       $("#cart_item_badge").text(data.cart_item)

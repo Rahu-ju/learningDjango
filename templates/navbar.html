@@ -30,7 +30,7 @@
       </form>
 <!-- search form end   -->
       <li class="nav-item float-right">
-        <a class="nav-link" href="{% url 'cart' %}">cart <span id="cart_item_badge" class="badge">{{ request.session.cart_item_count }}</span></a>
+        <a class="nav-link" href="{% url 'cart' %}">cart <span id="cart_item_badge" class="badge" data-url="{% url 'item_count' %}">{{ request.session.cart_item_count }}</span></a>
       </li>
     </ul>
   </div>
