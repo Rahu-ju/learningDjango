@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.http import HttpResponseRedirect, JsonResponse, Http404
 from django.views.generic.base import View
-from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.detail import SingleObjectMixin, DetailView
+from django.contrib.auth.forms import AuthenticationForm
 
 from products.models import Variation
 from carts.models import Cart, CartItem
@@ -135,3 +136,29 @@ class CartView(SingleObjectMixin, View):
         context ={"object": self.get_object()}
         template = self.template_name
         return render(request, template, context)
+
+
+# Checkout View
+class CheckoutView(DetailView):
+    model = Cart
+    template_name = "carts/checkout_view.html"
+
+    def get_object(self, *args, **kwargs):
+        cart_id = self.request.session.get('cart_id')
+        if cart_id == None:
+            return redirect(reverse('cart'))
+        cart = Cart.objects.get(id=cart_id)
+        return cart
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CheckoutView, self).get_context_data(*args, **kwargs)
+
+        if not self.request.user.is_authenticated:
+            context["login_form"] = AuthenticationForm()
+            context["user_can_continue"] = False
+            # buit Absolute url for this view and feed to the context dict
+            context["next_url"] = self.request.build_absolute_uri()
+            print(self.request.build_absolute_uri())
+        else:
+            context["user_can_continue"] = True
+        return context

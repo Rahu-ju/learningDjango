@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% block content %}
+{% include "navbar.html" %}
+
+{% if not user_can_continue %}
+<form method="post" action="{% url 'login' %}"> {% csrf_token %}
+  {% bootstrap_form login_form %}
+  <!--if this type of input given then login view redirect to the next_url  -->
+  <input type="hidden" name="next" value="{{next_url}}">
+  <input type="submit" class="btn btn-outline-primary" value="Login">
+</form>
+{% else %}
+<p>Here i am</p>
+{% endif %}
+
+{% endblock %}
