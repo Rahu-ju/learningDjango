@@ -50,7 +50,23 @@
         <td></td>
         <td></td>
         <td></td>
-        <td id="subtotal" class="text-right">Subtotal: {{ object.subtotal }}</td>
+        <td  class="text-right">Subtotal: <span id="subtotal">{{ object.subtotal }}</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td  class="text-right">Tax total: <span id="taxTotal">{{ object.tax_total }}</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td  class="text-right">Total: <span id="total">{{ object.total }}</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -93,6 +109,9 @@ $(".item-qty").change(function(event){
       } else {
         $("#subtotal").text(data.subtotal);
         $("#item-"+item).text(data.line_total);
+        $("#taxTotal").text(data.tax_total)
+        $("#total").text(data.total)
+
       };
       // show the flash mesage
       ShowFlashMessage(data.flash_message)

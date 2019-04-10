@@ -99,7 +99,7 @@ class CartView(SingleObjectMixin, View):
 
         if request.is_ajax():
             # For ajax response it retrive
-            # line_item_total and subtotal
+            # line_item_total, subtotal, tax_total and total
             # and take flash message.
             try:
                 line_total = cart_item.line_item_total
@@ -111,12 +111,25 @@ class CartView(SingleObjectMixin, View):
                 subtotal = cart_item.cart.subtotal
             except:
                 subtotal = None
+            # retrieve tax_total
+            try:
+                tax_total = cart_item.cart.tax_total
+            except:
+                tax_total = None
+
+            # retrive cart total
+            try:
+                total = cart_item.cart.total
+            except:
+                total = None
 
             return JsonResponse({
                 "line_total": line_total,
                 "subtotal": subtotal,
                 "delete": delete_item,
-                "flash_message": flash_message
+                "flash_message": flash_message,
+                "tax_total": tax_total,
+                "total": total
             })
 
         context ={"object": self.get_object()}

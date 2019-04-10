@@ -26,7 +26,7 @@ class CartItem(models.Model):
     def remove(self):
         return self.item.remove_from_cart()
 
-# Calculate the line total before the cart item save (pre save signals)
+# Calculate and feed the line total before the cart item save using pre save signals
 def cart_item_pre_save_receiver(sender, instance, *args, **kwargs):
     qty = instance.quantity
     price = instance.item.get_price()
@@ -35,7 +35,7 @@ def cart_item_pre_save_receiver(sender, instance, *args, **kwargs):
 pre_save.connect(cart_item_pre_save_receiver, sender=CartItem)
 
 
-# Calculate the subtotal after the cart item save (post save signal)
+# Calculate tand feed he subtotal after the cart item save using post save signal
 def cart_item_post_save_receiver(sender, instance, *args, **kwargs):
     instance.cart.update_subtotal()
 post_save.connect(cart_item_post_save_receiver, sender=CartItem)
@@ -48,7 +48,11 @@ class Cart(models.Model):
     items = models.ManyToManyField(Variation, through=CartItem)
     timestamp =  models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
-    subtotal = models.DecimalField(max_digits=50, decimal_places=2, blank=True, null=True)
+    # the default number in the following  field is not matter because 
+    # those field is feeded in time as it is need.
+    subtotal = models.DecimalField(max_digits=50, decimal_places=2, default=25.00)
+    tax_total = models.DecimalField(max_digits=50, decimal_places=2, default=0.085)
+    total = models.DecimalField(max_digits=50, decimal_places=2, default=25.00)
 
     def __str__(self):
         return str(self.id)
@@ -61,7 +65,16 @@ class Cart(models.Model):
         self.subtotal = subtotal
         self.save()
 
-    
+# Calculate and feed the tax_total and total before the cart save
+def do_tax_and_total_receiver(sender, instance, *args, **kwargs):
+    subtotal = Decimal(instance.subtotal)
+    tax_total = round(subtotal * Decimal(0.085), 2)
+    total =round(subtotal + Decimal(tax_total), 2)
+    instance.tax_total = tax_total
+    instance.total = total
+pre_save.connect(do_tax_and_total_receiver, sender=Cart)
+
+
     # users
     # item
     # timestamp **created
