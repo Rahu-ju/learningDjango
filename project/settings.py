@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'joins',
     'products',
     'carts',
+    'orders',
 
     # Custom authentication app users
     'users',
