@@ -93,9 +93,9 @@ margin-bottom: : 1%;
 /* For laptop display width */
 
 /* hide boostrap default form messages  and label*/
-.form-group small,label{
+/* .form-group small,label{
   display: none;
-}
+} */
 
 /* Custom bootstrap form design */
 .form-control{

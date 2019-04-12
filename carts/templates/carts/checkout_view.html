@@ -3,27 +3,34 @@
 {% block content %}
 {% include "navbar.html" %}
 
-<div class="row mt-5">
+
 {% if not user_can_continue %}
+
+<div class="row mt-5">
+  <!-- Gust user form in checkout view -->
+  <div class="col-sm-5">
+    <h5>Continue as Guest</h5>
+    <form  method="post" action="{% url 'checkout' %}"> {% csrf_token %}
+      {% bootstrap_form guest_form %}
+      <input type="submit"  class="btn btn-outline-success" value="continue as guest"/>
+    </form>
+  </div>
+
+  <!--middle div  -->
+  <div class="col-sm-2"></div>
+
   <!-- User login form in checkout view -->
-  <div class="col-sm-6">
+  <div class="col-sm-5">
     <h5>Continue as user</h5>
     <form method="post" action="{% url 'login' %}"> {% csrf_token %}
       {% bootstrap_form login_form %}
       <!--if this type of input given then login view redirect to the next_url  -->
       <input type="hidden" name="next" value="{{next_url}}">
-      <input type="submit" class="btn btn-outline-primary" value="Login">
+      <input type="submit" class="btn btn-outline-primary" value="Login"/>
     </form>
+
   </div>
-{% else %}
-  <!-- Gust user form in checkout view -->
-  <div class="col-sm-6">
-    <h5>Continue as Guest</h5
-    <form action="" method="post">{% csrf_token %}
-      {% bootstrap_form guest_form %}
-      <input type="submit" name="" value="submit" class="btn btn-outline-success">
-    </form>
-  </div>
-{% endif %}
 </div>
+
+{% endif %}
 {% endblock %}

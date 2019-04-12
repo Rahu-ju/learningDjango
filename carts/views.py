@@ -9,6 +9,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from products.models import Variation
 from .models import Cart, CartItem
 from orders.forms import GuestCheckoutForm
+from orders.models import UserCheckout
 
 # Create your views here.
 class CartItemCountView(View):
@@ -156,20 +157,39 @@ class CheckoutView(FormMixin, DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super(CheckoutView, self).get_context_data(*args, **kwargs)
 
-        if not self.request.user.is_authenticated:
+        # if user is not authenticated or user checkout id is not exist
+        # then it show the guest user form and user singn in form.
+        # therwise it show the checkout page without the two forms.
+        # Where user checkout id coming from session dict which is feeded inside the post function.
+        # it is feeded when user submit guest form.
+        user_can_continue = False
+        user_checkout_id = self.request.session.get("user_checkout_id")
+        print(user_checkout_id)
+        if not self.request.user.is_authenticated and user_checkout_id == None:
             context["login_form"] = AuthenticationForm()
-            context["user_can_continue"] = False
+
             # buit Absolute url for this view and feed to the context dict
             context["next_url"] = self.request.build_absolute_uri()
-            print(self.request.build_absolute_uri())
+        elif self.request.user.is_authenticated or user_checkout_id != None:
+            user_can_continue = True
         else:
-            context["user_can_continue"] = True
-            context['guest_form'] = self.get_form()
+            pass
+        context["user_can_continue"] = user_can_continue
+        context['guest_form'] = self.get_form()
         return context
 
     def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
         form = self.get_form()
         if form.is_valid():
+            email = form.cleaned_data['email']
+
+            # Create userchecout object if the email is not exist
+            # if it exist then it get the object instance.
+            user_checkout, created = UserCheckout.objects.get_or_create(email=email)
+            
+            # Feeded the user checkout id into the session dict
+            request.session["user_checkout_id"] = user_checkout.id
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
