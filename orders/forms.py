@@ -19,3 +19,8 @@ class GuestCheckoutForm(forms.Form):
                 raise forms.ValidationError("This user already exist. Please login instead.")
         else:
             raise forms.ValidationError("Please confirm emails are the same.")
+
+
+class AddressSelectForm(forms.Form):
+    billing = forms.CharField(max_length=120)
+    shipping = forms.CharField(max_length=120)

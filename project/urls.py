@@ -20,6 +20,7 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 
 from carts.views import CartView, CartItemCountView, CheckoutView
+from orders.views import AddressSelectFormView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,5 +37,7 @@ urlpatterns = [
     path('cart/', CartView.as_view(), name='cart'),
     path('cart/count', CartItemCountView.as_view(), name='item_count'),
     path('cart/checkout/', CheckoutView.as_view(), name='checkout'),
+    # orders app
+    path('orders/selectAddress/', AddressSelectFormView.as_view(), name='address_select'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
