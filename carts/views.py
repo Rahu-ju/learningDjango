@@ -174,6 +174,16 @@ class CheckoutView(FormMixin, DetailView):
             user_can_continue = True
         else:
             pass
+
+        # If user is authenticated then it automatically create userchecout
+        # object depending on that user.
+        # and then feeding the user checkout id to the session dict.
+        if self.request.user.is_authenticated:
+            email = self.request.user.email
+            user_checkout, created = UserCheckout.objects.get_or_create(email=self.request.user.email)
+            user_checkout.user = self.request.user
+            user_checkout.save()
+            self.request.session["user_checkout_id"] = user_checkout.id
         context["user_can_continue"] = user_can_continue
         context['guest_form'] = self.get_form()
         return context
@@ -187,7 +197,7 @@ class CheckoutView(FormMixin, DetailView):
             # Create userchecout object if the email is not exist
             # if it exist then it get the object instance.
             user_checkout, created = UserCheckout.objects.get_or_create(email=email)
-            
+
             # Feeded the user checkout id into the session dict
             request.session["user_checkout_id"] = user_checkout.id
             return self.form_valid(form)
