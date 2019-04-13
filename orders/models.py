@@ -14,8 +14,8 @@ class UserCheckout(models.Model):
 
 # User address model.
 address_type = (
-    ('Billing', 'Billing'),
-    ('Shipping', 'Shipping'),
+    ('billing', 'billing'),
+    ('shipping', 'shipping'),
 )
 
 class UserAddress(models.Model):

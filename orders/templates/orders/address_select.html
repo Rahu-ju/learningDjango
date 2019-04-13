@@ -1,5 +1,25 @@
 {% extends "base.html" %}
+{% load bootstrap4 %}
 {% block content%}
 {% include "navbar.html" %}
-{{form}}
+
+<div class="row mt-5">
+  <div class="col-sm-8">
+    <form action="" method="post">{% csrf_token %}
+      {% bootstrap_form form %}
+      <input type="submit" value="Submit"class="btn btn-outline-success">
+    </form>
+  </div>
+  <div class="col-sm-4"></div>
+</div>
+
 {% endblock content %}
+
+<!-- Css for this page -->
+{% block css %}
+<style>
+  .form-group small, label {
+    display: block;
+  }
+</style>
+{% endblock css %}

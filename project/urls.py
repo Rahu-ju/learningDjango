@@ -38,6 +38,6 @@ urlpatterns = [
     path('cart/count', CartItemCountView.as_view(), name='item_count'),
     path('cart/checkout/', CheckoutView.as_view(), name='checkout'),
     # orders app
-    path('orders/selectAddress/', AddressSelectFormView.as_view(), name='address_select'),
+    path('order/address/', AddressSelectFormView.as_view(), name='address_select'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

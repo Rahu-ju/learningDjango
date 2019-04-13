@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth import get_user_model
 
+from orders.models import UserAddress
+
 
 class GuestCheckoutForm(forms.Form):
     email = forms.EmailField()
@@ -22,5 +24,13 @@ class GuestCheckoutForm(forms.Form):
 
 
 class AddressSelectForm(forms.Form):
-    billing = forms.CharField(max_length=120)
-    shipping = forms.CharField(max_length=120)
+    billing_address = forms.ModelChoiceField(
+            queryset=UserAddress.objects.filter(type="billing"),
+            widget=forms.RadioSelect,
+            empty_label=None
+            )
+    shipping_address = forms.ModelChoiceField(
+            queryset=UserAddress.objects.filter(type="shipping"),
+            widget=forms.RadioSelect,
+            empty_label=None
+            )
