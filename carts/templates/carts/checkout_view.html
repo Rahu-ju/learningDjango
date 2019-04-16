@@ -32,5 +32,31 @@
   </div>
 </div>
 
+<!-- else it show the order details -->
+{% else %}
+<div class="row">
+  <div class="card mx-auto mt-5" style="width: 18rem;" >
+    <div class="card-header">
+      Orders deatils
+    </div>
+    <ul class="list-group list-group-flush">
+      <!-- All the products -->
+      <li class="list-group-item">
+        {% for product in order.cart.cartitem_set.all %}
+          {{ product.get_product_title }}-{{ product.get_variation_title }}-{{ product.quantity }}pice{{ product.quantity|pluralize }} <br>
+        {% endfor %}
+      </li>
+
+
+      <li class="list-group-item">Cart subtotal: {{ order.cart.subtotal }}</li>
+      <li class="list-group-item">Tax {{ order.cart.tax_total }}</li>
+      <li class="list-group-item">Item total: {{ order.cart.total }}</li>
+      <li class="list-group-item">Shipping cost: {{ order.shipping_total_price }}</li>
+      <li class="list-group-item">Order total: {{ order.order_total }}</li>
+    </ul>
+  </div>
+</div>
+
+
 {% endif %}
 {% endblock %}

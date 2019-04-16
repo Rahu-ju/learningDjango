@@ -38,9 +38,9 @@ class UserAddress(models.Model):
 # Order model
 class Order(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    user = models.ForeignKey(UserCheckout, on_delete=models.CASCADE)
-    billing_address = models.ForeignKey(UserAddress, on_delete=models.CASCADE,related_name="billing_address")
-    shipping_address = models.ForeignKey(UserAddress, on_delete=models.CASCADE,related_name="shipping_address")
+    user = models.ForeignKey(UserCheckout, on_delete=models.CASCADE, null=True)
+    billing_address = models.ForeignKey(UserAddress, on_delete=models.CASCADE,related_name="billing_address", null=True)
+    shipping_address = models.ForeignKey(UserAddress, on_delete=models.CASCADE,related_name="shipping_address", null=True)
     shipping_total_price = models.DecimalField(max_digits=50, decimal_places=2, default=5)
     order_total = models.DecimalField(max_digits=50, decimal_places=2)
     # order_id
@@ -53,5 +53,5 @@ def order_pre_save(sender, instance, *args, **kwargs):
     shipping_total = instance.shipping_total_price
     cart_total = instance.cart.total
     order_total = Decimal(shipping_total) + Decimal(cart_total)
-    instance.order_total  = order_total
+    instance.order_total  = Decimal(order_total)
 pre_save.connect(order_pre_save, sender=Order)

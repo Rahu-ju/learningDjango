@@ -155,20 +155,24 @@ class CheckoutView(FormMixin, DetailView):
         cart = Cart.objects.get(id=cart_id)
         return cart
 
-    # return the order object by creating or retriving from databse
+    # Return the order object by creating or retriving from databse
     def get_order(self, *args, **kwargs):
         # if new_order_id exist in the session then it retrive
         # the order therwise it create a new order instance and feed the id
         # to the session.
+
+        #""" Lession to learn:
+        # create is use when you need the id of that instance(because it save the model)
+        # instance = Model() is used when you step by step feed the data to the instance."""
         cart = self.get_object()
-        try:
-            new_order_id = self.request.session.get("new_order_id")
-            new_order = Order.objects.get(id=new_order_id)
-        except:
-            new_order = Order()
-            new_order.cart = cart
+        new_order_id = self.request.session.get("new_order_id")
+        if new_order_id is None:
+            new_order = Order.objects.create(cart=cart)
             self.request.session["new_order_id"] = new_order.id
+            return new_order
+        new_order = Order.objects.get(id=new_order_id)
         return new_order
+
 
 
     def get_context_data(self, *args, **kwargs):
@@ -181,11 +185,10 @@ class CheckoutView(FormMixin, DetailView):
         # it is feeded when user submit guest form.
         user_can_continue = False
         user_checkout_id = self.request.session.get("user_checkout_id")
-        print(user_checkout_id)
         if not self.request.user.is_authenticated and user_checkout_id == None:
             context["login_form"] = AuthenticationForm()
 
-            # buit Absolute url for this view and feed to the context dict
+            # build Absolute url for this view and feed to the context dict
             context["next_url"] = self.request.build_absolute_uri()
         elif self.request.user.is_authenticated or user_checkout_id != None:
             user_can_continue = True
@@ -203,6 +206,9 @@ class CheckoutView(FormMixin, DetailView):
             self.request.session["user_checkout_id"] = user_checkout.id
         context["user_can_continue"] = user_can_continue
         context['guest_form'] = self.get_form()
+
+        # Feeding order instance
+        context['order'] = self.get_order()
         return context
 
     def post(self, request, *args, **kwargs):
