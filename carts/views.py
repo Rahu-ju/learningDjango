@@ -147,12 +147,29 @@ class CheckoutView(FormMixin, DetailView):
     template_name = "carts/checkout_view.html"
     form_class = GuestCheckoutForm
 
+    # return the cart object by creating or retriving from databse.
     def get_object(self, *args, **kwargs):
         cart_id = self.request.session.get('cart_id')
         if cart_id == None:
             return redirect(reverse('cart'))
         cart = Cart.objects.get(id=cart_id)
         return cart
+
+    # return the order object by creating or retriving from databse
+    def get_order(self, *args, **kwargs):
+        # if new_order_id exist in the session then it retrive
+        # the order therwise it create a new order instance and feed the id
+        # to the session.
+        cart = self.get_object()
+        try:
+            new_order_id = self.request.session.get("new_order_id")
+            new_order = Order.objects.get(id=new_order_id)
+        except:
+            new_order = Order()
+            new_order.cart = cart
+            self.request.session["new_order_id"] = new_order.id
+        return new_order
+
 
     def get_context_data(self, *args, **kwargs):
         context = super(CheckoutView, self).get_context_data(*args, **kwargs)
@@ -189,27 +206,31 @@ class CheckoutView(FormMixin, DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
+        # Process the data from guest checkout form.
         self.object = self.get_object()
         form = self.get_form()
         if form.is_valid():
             email = form.cleaned_data['email']
 
-            # Create userchecout object if the email is not exist
+            # Create userchecout object if the email is not already exist
             # if it exist then it get the object instance.
             user_checkout, created = UserCheckout.objects.get_or_create(email=email)
 
             # Feeded the user checkout id into the session dict
             request.session["user_checkout_id"] = user_checkout.id
-            return self.form_valid(form)
+
+            # return self.form_valid(form)
+            # its better to use  the following redirect url when the form is valid
+            return self.get_success_url()
         else:
             return self.form_invalid(form)
 
     def get(self, request, *args, **kwargs):
+        # take data from user address form and  feed to the order instance and save.
         get_data = super(CheckoutView, self).get(request, *args, **kwargs)
 
         # get cart object and user checkout id
-        cart = self.get_object()
-        user_checkout_id = request.session["user_checkout_id"]
+        user_checkout_id = request.session.get('user_checkout_id')
 
         # if user_checkout_id exists then it process the order
         if user_checkout_id != None:
@@ -230,26 +251,16 @@ class CheckoutView(FormMixin, DetailView):
                 billing_address = UserAddress.objects.get(id=billing_address_id)
                 shipping_address = UserAddress.objects.get(id=shipping_address_id)
 
-            # if new_order_id exist in the session then it retrive
-            # the order therwise it create a new order instance and feed the id
-            # to the session.
-            try:
-                new_order_id = request.session.get("new_order_id")
-                new_order = Order.objects.get(id=new_order_id)
-            except:
-                new_order = Order()
-                request.session["new_order_id"] = new_order.id
+
 
             # now its time to feed the order instance and save.
-            new_order.cart = cart
+            new_order = self.get_order()
             new_order.user = user_checkout
             new_order.billing_address = billing_address
             new_order.shipping_address = shipping_address
             new_order.save()
 
         return get_data
-
-
 
 
     def get_success_url(self):

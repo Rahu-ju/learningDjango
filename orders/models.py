@@ -1,4 +1,7 @@
+from decimal import Decimal
+
 from django.db import models
+from django.db.models.signals import pre_save
 from django.conf import settings
 
 from carts.models import Cart
@@ -42,5 +45,13 @@ class Order(models.Model):
     order_total = models.DecimalField(max_digits=50, decimal_places=2)
     # order_id
 
-    def __str__(sefl):
-        return self.cart.id
+    def __str__(self):
+        return str(self.cart.id)
+
+# Calculate the order total before save the order model.
+def order_pre_save(sender, instance, *args, **kwargs):
+    shipping_total = instance.shipping_total_price
+    cart_total = instance.cart.total
+    order_total = Decimal(shipping_total) + Decimal(cart_total)
+    instance.order_total  = order_total
+pre_save.connect(order_pre_save, sender=Order)
