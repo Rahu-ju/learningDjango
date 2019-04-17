@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% block content %}
+{% include "navbar.html" %}
+<div class="row mt-5">
+
+  <div class="col-sm-6 offset-sm-3 ">
+  {% bootstrap_messages %}
+    <form action="" method="POST">{% csrf_token %}
+      {% bootstrap_form form %}
+      <input type="submit" class="btn btn-outline-success" name="save">
+    </form>
+  </div>
+</div>
+
+{% endblock content %}

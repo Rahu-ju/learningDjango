@@ -200,7 +200,7 @@ class CheckoutView(FormMixin, DetailView):
         # and then feeding the user checkout id to the session dict.
         if self.request.user.is_authenticated:
             email = self.request.user.email
-            user_checkout, created = UserCheckout.objects.get_or_create(email=self.request.user.email)
+            user_checkout, created = UserCheckout.objects.get_or_create(email=email)
             user_checkout.user = self.request.user
             user_checkout.save()
             self.request.session["user_checkout_id"] = user_checkout.id
@@ -249,15 +249,13 @@ class CheckoutView(FormMixin, DetailView):
             shipping_address_id = request.session.get("shipping_address_id")
 
             # if billing and shipping address id exist
-            # then it retrive the address form databse
-            # other wise it redirect the user address slect view page.
+            # then it retrive the address from databse
+            # other wise it redirect the user address select view page.
             if billing_address_id == None or shipping_address_id == None:
                 return redirect(reverse("address_select"))
             else:
                 billing_address = UserAddress.objects.get(id=billing_address_id)
                 shipping_address = UserAddress.objects.get(id=shipping_address_id)
-
-
 
             # now its time to feed the order instance and save.
             new_order = self.get_order()
