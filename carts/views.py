@@ -177,23 +177,16 @@ class CheckoutView(FormMixin, DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(CheckoutView, self).get_context_data(*args, **kwargs)
-
         # if user is not authenticated or user checkout id is not exist
+        # (Where user checkout id coming from session dict which is feeded inside the post function.
+        # it is feeded when user submit guest form.)
         # then it show the guest user form and user singn in form.
-        # therwise it show the checkout page without the two forms.
-        # Where user checkout id coming from session dict which is feeded inside the post function.
-        # it is feeded when user submit guest form.
+        # therwise it redirect to the AddressCreateView
+        # then it redirect to AddressSelectFormView
+        # then it redirect to CheckoutView once again and show the order deatils.
+
         user_can_continue = False
         user_checkout_id = self.request.session.get("user_checkout_id")
-        if not self.request.user.is_authenticated and user_checkout_id == None:
-            context["login_form"] = AuthenticationForm()
-
-            # build Absolute url for this view and feed to the context dict
-            context["next_url"] = self.request.build_absolute_uri()
-        elif self.request.user.is_authenticated or user_checkout_id != None:
-            user_can_continue = True
-        else:
-            pass
 
         # If user is authenticated then it automatically create userchecout
         # object depending on that user.
@@ -204,9 +197,18 @@ class CheckoutView(FormMixin, DetailView):
             user_checkout.user = self.request.user
             user_checkout.save()
             self.request.session["user_checkout_id"] = user_checkout.id
-        context["user_can_continue"] = user_can_continue
-        context['guest_form'] = self.get_form()
+            user_can_continue = True
+        elif not self.request.user.is_authenticated and user_checkout_id == None:
+            context["login_form"] = AuthenticationForm()
+            # build Absolute url for this view and feed to the context dict
+            context["next_url"] = self.request.build_absolute_uri()
+        else:
+            pass
+        if user_checkout_id != None:
+            user_can_continue = True
 
+        context["user_can_continue"] = user_can_continue
+        context["guest_form"] = self.get_form()
         # Feeding order instance
         context['order'] = self.get_order()
         return context

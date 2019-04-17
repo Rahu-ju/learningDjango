@@ -6,14 +6,14 @@
 <div class="container">
   <div class="row">
     <div class="col text-center">
-      <h4 class="">Your cart is empty</h4>
+      <p class="lead">Your cart is empty.</p>
       <a href="{% url "products" %}">Continue Shopping</a>
     </div>
   </div>
 </div>
 
 {% else %}
-  <h5>All the product on your cart</h5><br>
+  <p class="lead">Your cart</p>
   <table class="table">
     <thead>
       <tr>
@@ -71,6 +71,12 @@
       </tr>
     </tbody>
   </table>
+  <!-- below checkout link -->
+  <div class="row">
+    <div class="col-sm-3 offset-sm-9">
+      <a href="{% url "checkout" %}"><button class="btn btn-outline-success">Checkout</button></a>
+    </div>
+  </div>
 {% endif %}
 
 
