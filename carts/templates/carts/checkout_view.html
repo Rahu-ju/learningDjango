@@ -35,7 +35,7 @@
 <!-- else it show the order details -->
 {% else %}
 <div class="row">
-  <div class="card mx-auto mt-5" style="width: 18rem;" >
+  <div class="card mx-auto mt-5 col-sm-8 offset-sm-2" style="" >
     <div class="card-header">
       Orders deatils
     </div>
@@ -53,6 +53,10 @@
       <li class="list-group-item">Item total: {{ order.cart.total }}</li>
       <li class="list-group-item">Shipping cost: {{ order.shipping_total_price }}</li>
       <li class="list-group-item">Order total: {{ order.order_total }}</li>
+    </ul>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">Billing  address: {{ order.billing_address.get_address }}</li>
+      <li class="list-group-item">Shipping address: {{ order.shipping_address.get_address }}</li>
     </ul>
   </div>
 </div>

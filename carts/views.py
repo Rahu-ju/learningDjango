@@ -10,6 +10,7 @@ from products.models import Variation
 from .models import Cart, CartItem
 from orders.forms import GuestCheckoutForm
 from orders.models import UserCheckout, UserAddress, Order
+from orders.mixin import CartOrderMixin
 
 # Create your views here.
 class CartItemCountView(View):
@@ -141,39 +142,18 @@ class CartView(SingleObjectMixin, View):
         return render(request, template, context)
 
 
+
 # Checkout View
-class CheckoutView(FormMixin, DetailView):
+class CheckoutView(CartOrderMixin, FormMixin, DetailView):
     model = Cart
     template_name = "carts/checkout_view.html"
     form_class = GuestCheckoutForm
 
-    # return the cart object by creating or retriving from databse.
     def get_object(self, *args, **kwargs):
-        cart_id = self.request.session.get('cart_id')
-        if cart_id == None:
-            return redirect(reverse('cart'))
-        cart = Cart.objects.get(id=cart_id)
+        cart = self.get_cart()
+        if cart == None:
+            return None
         return cart
-
-    # Return the order object by creating or retriving from databse
-    def get_order(self, *args, **kwargs):
-        # if new_order_id exist in the session then it retrive
-        # the order therwise it create a new order instance and feed the id
-        # to the session.
-
-        #""" Lession to learn:
-        # create is use when you need the id of that instance(because it save the model)
-        # instance = Model() is used when you step by step feed the data to the instance."""
-        cart = self.get_object()
-        new_order_id = self.request.session.get("new_order_id")
-        if new_order_id is None:
-            new_order = Order.objects.create(cart=cart)
-            self.request.session["new_order_id"] = new_order.id
-            return new_order
-        new_order = Order.objects.get(id=new_order_id)
-        return new_order
-
-
 
     def get_context_data(self, *args, **kwargs):
         context = super(CheckoutView, self).get_context_data(*args, **kwargs)
@@ -202,13 +182,13 @@ class CheckoutView(FormMixin, DetailView):
             context["login_form"] = AuthenticationForm()
             # build Absolute url for this view and feed to the context dict
             context["next_url"] = self.request.build_absolute_uri()
+            context["guest_form"] = self.get_form()
         else:
             pass
         if user_checkout_id != None:
             user_can_continue = True
 
         context["user_can_continue"] = user_can_continue
-        context["guest_form"] = self.get_form()
         # Feeding order instance
         context['order'] = self.get_order()
         return context
@@ -237,33 +217,16 @@ class CheckoutView(FormMixin, DetailView):
         # take data from user address form and  feed to the order instance and save.
         get_data = super(CheckoutView, self).get(request, *args, **kwargs)
 
-        # get cart object and user checkout id
+        cart = self.get_cart()
+        if cart == None:
+            return redirect("cart")
+        new_order = self.get_order()
         user_checkout_id = request.session.get('user_checkout_id')
-
-        # if user_checkout_id exists then it process the order
         if user_checkout_id != None:
             user_checkout = UserCheckout.objects.get(id=user_checkout_id)
-
-            # The billing and shippping id feeded in to the session when
-            # address select form is submitted. It happens inside the form_valid function
-            # in the AddressSelectFormView.
-            billing_address_id = request.session.get("billing_address_id")
-            shipping_address_id = request.session.get("shipping_address_id")
-
-            # if billing and shipping address id exist
-            # then it retrive the address from databse
-            # other wise it redirect the user address select view page.
-            if billing_address_id == None or shipping_address_id == None:
+            if new_order.billing_address == None or new_order.shipping_address == None:
                 return redirect(reverse("address_select"))
-            else:
-                billing_address = UserAddress.objects.get(id=billing_address_id)
-                shipping_address = UserAddress.objects.get(id=shipping_address_id)
-
-            # now its time to feed the order instance and save.
-            new_order = self.get_order()
             new_order.user = user_checkout
-            new_order.billing_address = billing_address
-            new_order.shipping_address = shipping_address
             new_order.save()
 
         return get_data

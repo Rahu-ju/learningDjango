@@ -4,6 +4,7 @@ from django.contrib import messages
 
 from .forms import AddressSelectForm, AddressCreateForm
 from .models import UserAddress, UserCheckout
+from .mixin import CartOrderMixin
 
 
 # Create your views here.
@@ -22,7 +23,7 @@ class AddressCreateView(CreateView):
         return super(AddressCreateView, self).form_valid(form, *args, **kwargs)
 
 
-class AddressSelectFormView(FormView):
+class AddressSelectFormView(CartOrderMixin, FormView):
     form_class = AddressSelectForm
     template_name = "orders/address_select.html"
 
@@ -66,9 +67,14 @@ class AddressSelectFormView(FormView):
         billing_address = form.cleaned_data["billing_address"]
         shipping_address =form.cleaned_data["shipping_address"]
 
-        # Feeding the addressess objects id to the session dict.
-        self.request.session["billing_address_id"] = billing_address.id
-        self.request.session["shipping_address_id"] = shipping_address.id
+        # Feeding the address objects into the order instance coming from mixin
+        new_order = self.get_order()
+        new_order.billing_address = billing_address
+        new_order.shipping_address = shipping_address
+        new_order.save()
+        # # Feeding the addressess objects id to the session dict.
+        # self.request.session["billing_address_id"] = billing_address.id
+        # self.request.session["shipping_address_id"] = shipping_address.id
         return super(AddressSelectFormView,self).form_valid(form, *args, **kwargs)
 
     def get_success_url(self):

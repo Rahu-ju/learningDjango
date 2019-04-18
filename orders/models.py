@@ -34,6 +34,9 @@ class UserAddress(models.Model):
     def __str__(self):
         return self.street
 
+    def get_address(self):
+        return "%s, %s, %s-%s" % (self.street, self.city, self.state, self.zipcode)
+
 
 # Order model
 class Order(models.Model):
