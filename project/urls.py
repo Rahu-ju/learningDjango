@@ -19,7 +19,7 @@ from django.conf.urls.static import static
 from django.urls import path, include
 from django.views.generic import TemplateView
 
-from carts.views import CartView, CartItemCountView, CheckoutView
+from carts.views import CartView, CartItemCountView, CheckoutView, CheckoutFinalView
 from orders.views import AddressSelectFormView, AddressCreateView
 
 urlpatterns = [
@@ -37,6 +37,7 @@ urlpatterns = [
     path('cart/', CartView.as_view(), name='cart'),
     path('cart/count', CartItemCountView.as_view(), name='item_count'),
     path('cart/checkout/', CheckoutView.as_view(), name='checkout'),
+    path('cart/checkout/final/', CheckoutFinalView.as_view(), name='final_checkout'),
     # orders app
     path('order/address/', AddressSelectFormView.as_view(), name='address_select'),
     path('order/address/add/', AddressCreateView.as_view(), name='address_create'),

@@ -234,3 +234,13 @@ class CheckoutView(CartOrderMixin, FormMixin, DetailView):
 
     def get_success_url(self):
         return HttpResponseRedirect(reverse("checkout"))
+
+
+class CheckoutFinalView(View):
+    def post(self, request, *args, **kwargs):
+        payment_token = self.request.POST.get("payment_token")
+        print("payment_token %s" % payment_token )
+        return redirect('checkout')
+
+    def get(self, request, *args, **kwargs):
+        return redirect('checkout')

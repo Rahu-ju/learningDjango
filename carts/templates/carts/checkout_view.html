@@ -35,30 +35,41 @@
 <!-- else it show the order details -->
 {% else %}
 <div class="row">
-  <div class="card mx-auto mt-5 col-sm-8 offset-sm-2" style="" >
-    <div class="card-header">
-      Orders deatils
+  <div class="col-sm-8 offset-sm-2">
+    <div class="card mx-auto mt-5 text-center" style="" >
+      <div class="card-header">
+        <p class="lead">Orders deatils</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <!-- All the products -->
+        <li class="list-group-item">
+          {% for product in order.cart.cartitem_set.all %}
+            {{ product.get_product_title }}-{{ product.get_variation_title }}-{{ product.quantity }}pice{{ product.quantity|pluralize }} <br>
+          {% endfor %}
+        </li>
+
+
+        <li class="list-group-item">Cart subtotal: {{ order.cart.subtotal }}</li>
+        <li class="list-group-item">Tax {{ order.cart.tax_total }}</li>
+        <li class="list-group-item">Item total: {{ order.cart.total }}</li>
+        <li class="list-group-item">Shipping cost: {{ order.shipping_total_price }}</li>
+        <li class="list-group-item">Order total: {{ order.order_total }}</li>
+        <li class="list-group-item">Billing  to: {{ order.billing_address.get_address }}</li>
+        <li class="list-group-item">Shipping to: {{ order.shipping_address.get_address }}</li>
+        <li class="list-group-item">
+          <form action="{% url 'final_checkout' %}" method="POST">{% csrf_token %}
+            <input type="hidden" name="payment_token" value="abc">
+            <input type="submit" name="Complete Order">
+          </form>
+        </li>
+      </ul>
+
+
+
     </div>
-    <ul class="list-group list-group-flush">
-      <!-- All the products -->
-      <li class="list-group-item">
-        {% for product in order.cart.cartitem_set.all %}
-          {{ product.get_product_title }}-{{ product.get_variation_title }}-{{ product.quantity }}pice{{ product.quantity|pluralize }} <br>
-        {% endfor %}
-      </li>
-
-
-      <li class="list-group-item">Cart subtotal: {{ order.cart.subtotal }}</li>
-      <li class="list-group-item">Tax {{ order.cart.tax_total }}</li>
-      <li class="list-group-item">Item total: {{ order.cart.total }}</li>
-      <li class="list-group-item">Shipping cost: {{ order.shipping_total_price }}</li>
-      <li class="list-group-item">Order total: {{ order.order_total }}</li>
-    </ul>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item">Billing  address: {{ order.billing_address.get_address }}</li>
-      <li class="list-group-item">Shipping address: {{ order.shipping_address.get_address }}</li>
-    </ul>
   </div>
+
+
 </div>
 
 
