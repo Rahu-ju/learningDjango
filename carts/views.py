@@ -238,6 +238,11 @@ class CheckoutView(CartOrderMixin, FormMixin, DetailView):
 
 class CheckoutFinalView(CartOrderMixin, View):
     def post(self, request, *args, **kwargs):
+        """ As the form submitted, It's save the order status as completed,
+            delete cart_id, new_order_id from session and then redirect to
+            the CheckoutView, it's redirect to the CartView as the cart_id doesn't
+            exist.
+        """
         order = self.get_order()
         if request.POST.get("payment_token") == "abc":
             order.mark_completed()

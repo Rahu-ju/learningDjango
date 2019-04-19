@@ -1,13 +1,23 @@
 from django.shortcuts import render, reverse, redirect
 from django.views.generic.edit import FormView, CreateView
+from django.views.generic.list import ListView
 from django.contrib import messages
 
 from .forms import AddressSelectForm, AddressCreateForm
-from .models import UserAddress, UserCheckout
+from .models import UserAddress, UserCheckout, Order
 from .mixin import CartOrderMixin
 
 
 # Create your views here.
+class OrderList(ListView):
+    queryset = Order.objects.all()
+
+    def get_queryset(self):
+        user_checkout_id = self.request.session.get("user_checkout_id")
+        user_checkout = UserCheckout.objects.get(id=user_checkout_id)
+        return super(OrderList, self).get_queryset().filter(user=user_checkout)
+
+
 class AddressCreateView(CreateView):
     form_class = AddressCreateForm
     template_name = "orders/address_create.html"
