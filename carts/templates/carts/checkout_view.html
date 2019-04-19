@@ -38,7 +38,11 @@
   <div class="col-sm-8 offset-sm-2">
     <div class="card mx-auto mt-5 text-center" style="" >
       <div class="card-header">
-        <p class="lead">Orders deatils</p>
+        <p class="lead float-left">Orders deatils</p>
+        <form action="{% url 'final_checkout' %}" method="POST" class="float-right">{% csrf_token %}
+          <input type="hidden" name="payment_token" value="abc">
+          <input type="submit" class="btn btn-outline-success" name="Complete Order" value="Complete Order">
+        </form>
       </div>
       <ul class="list-group list-group-flush">
         <!-- All the products -->
@@ -56,12 +60,6 @@
         <li class="list-group-item">Order total: {{ order.order_total }}</li>
         <li class="list-group-item">Billing  to: {{ order.billing_address.get_address }}</li>
         <li class="list-group-item">Shipping to: {{ order.shipping_address.get_address }}</li>
-        <li class="list-group-item">
-          <form action="{% url 'final_checkout' %}" method="POST">{% csrf_token %}
-            <input type="hidden" name="payment_token" value="abc">
-            <input type="submit" name="Complete Order">
-          </form>
-        </li>
       </ul>
 
 

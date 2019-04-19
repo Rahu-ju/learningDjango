@@ -39,7 +39,13 @@ class UserAddress(models.Model):
 
 
 # Order model
+ORDER_STATUS_CHOICES = (
+    ('completed', 'Completed'),
+    ('created', 'Created')
+)
+
 class Order(models.Model):
+    status = models.CharField(max_length=120, choices=ORDER_STATUS_CHOICES, default='created')
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     user = models.ForeignKey(UserCheckout, on_delete=models.CASCADE, null=True)
     billing_address = models.ForeignKey(UserAddress, on_delete=models.CASCADE,related_name="billing_address", null=True)
@@ -50,6 +56,10 @@ class Order(models.Model):
 
     def __str__(self):
         return str(self.cart.id)
+
+    def mark_completed(self):
+        self.status = 'completed'
+        self.save()
 
 # Calculate the order total before save the order model.
 def order_pre_save(sender, instance, *args, **kwargs):

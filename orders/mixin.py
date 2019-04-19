@@ -23,6 +23,8 @@ class CartOrderMixin:
         # create is use when you need the id of that instance(because it save the model)
         # instance = Model() is used when you step by step feed the data to the instance."""
         cart = self.get_cart()
+        if cart == None:
+            return None
         new_order_id = self.request.session.get("new_order_id")
         if new_order_id is None:
             new_order = Order.objects.create(cart=cart)
