@@ -1,3 +1,6 @@
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 from carts.models import Cart
 from .models import Order
 
@@ -32,3 +35,10 @@ class CartOrderMixin:
             return new_order
         new_order = Order.objects.get(id=new_order_id)
         return new_order
+
+
+
+class LoginRequiredMixin:
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)

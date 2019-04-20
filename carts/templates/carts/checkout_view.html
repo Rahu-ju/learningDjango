@@ -38,7 +38,7 @@
   <div class="col-sm-8 offset-sm-2">
     <div class="card mx-auto mt-5 text-center" style="" >
       <div class="card-header">
-        <p class="lead float-left">Orders deatils</p>
+        <p class="lead float-left">Orders details</p>
         <form action="{% url 'final_checkout' %}" method="POST" class="float-right">{% csrf_token %}
           <input type="hidden" name="payment_token" value="abc">
           <input type="submit" class="btn btn-outline-success" name="Complete Order" value="Complete Order">

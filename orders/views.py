@@ -2,14 +2,15 @@ from django.shortcuts import render, reverse, redirect
 from django.views.generic.edit import FormView, CreateView
 from django.views.generic.list import ListView
 from django.contrib import messages
+# from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import AddressSelectForm, AddressCreateForm
 from .models import UserAddress, UserCheckout, Order
-from .mixin import CartOrderMixin
+from .mixin import CartOrderMixin, LoginRequiredMixin
 
 
 # Create your views here.
-class OrderList(ListView):
+class OrderList(LoginRequiredMixin, ListView):
     queryset = Order.objects.all()
 
     def get_queryset(self):

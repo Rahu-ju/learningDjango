@@ -29,7 +29,7 @@ urlpatterns = [
     # Home page
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     # user app
-    path('user/', include('users.urls')),
+    path('accounts/', include('users.urls')),
     # Product app
     path('product/', include('products.urls')),
     path('category/', include('products.urls_category')),

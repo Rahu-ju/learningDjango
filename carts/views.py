@@ -5,6 +5,7 @@ from django.views.generic.base import View
 from django.views.generic.detail import SingleObjectMixin, DetailView
 from django.views.generic.edit import FormMixin
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
 
 from products.models import Variation
 from .models import Cart, CartItem
@@ -219,6 +220,7 @@ class CheckoutView(CartOrderMixin, FormMixin, DetailView):
 
         cart = self.get_cart()
         if cart == None:
+            messages.info(request, "Your order is being processed less than 24 hours..")
             return redirect("cart")
         new_order = self.get_order()
         user_checkout_id = request.session.get('user_checkout_id')

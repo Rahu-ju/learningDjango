@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
+{% load bootstrap4 %}
 {% block content %}
 {% include 'navbar.html' %}
 <br>
 {% if object.cartitem_set.count < 1 %}
 <div class="container">
   <div class="row">
-    <div class="col text-center">
+    <div class="col-sm-6 offset-sm-3 text-center">
       <p class="lead">Your cart is empty.</p>
+      {% bootstrap_messages %}
       <a href="{% url "products" %}">Continue Shopping</a>
     </div>
   </div>
