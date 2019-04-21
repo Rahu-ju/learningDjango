@@ -44,23 +44,9 @@
           <input type="submit" class="btn btn-outline-success" name="Complete Order" value="Complete Order">
         </form>
       </div>
-      <ul class="list-group list-group-flush">
-        <!-- All the products -->
-        <li class="list-group-item">
-          {% for product in order.cart.cartitem_set.all %}
-            {{ product.get_product_title }}-{{ product.get_variation_title }}-{{ product.quantity }}pice{{ product.quantity|pluralize }} <br>
-          {% endfor %}
-        </li>
 
-
-        <li class="list-group-item">Cart subtotal: {{ order.cart.subtotal }}</li>
-        <li class="list-group-item">Tax {{ order.cart.tax_total }}</li>
-        <li class="list-group-item">Item total: {{ order.cart.total }}</li>
-        <li class="list-group-item">Shipping cost: {{ order.shipping_total_price }}</li>
-        <li class="list-group-item">Order total: {{ order.order_total }}</li>
-        <li class="list-group-item">Billing  to: {{ order.billing_address.get_address }}</li>
-        <li class="list-group-item">Shipping to: {{ order.shipping_address.get_address }}</li>
-      </ul>
+      <!-- Taking the order summary template. -->
+      {% include "orders/order_summery.html" with order=order %}
 
 
 

@@ -1,8 +1,9 @@
 from django.shortcuts import render, reverse, redirect
+from django.http import Http404
 from django.views.generic.edit import FormView, CreateView
 from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 from django.contrib import messages
-# from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import AddressSelectForm, AddressCreateForm
 from .models import UserAddress, UserCheckout, Order
@@ -10,6 +11,31 @@ from .mixin import CartOrderMixin, LoginRequiredMixin
 
 
 # Create your views here.
+class OrderDetail(DetailView):
+    model = Order
+
+    def dispatch(self, request, *args, **kwargs):
+        """
+        if user didn't sign in or continue as guest then it raise 404 page with the following
+        message. Other wise user can see the detail page.
+        """
+        try:
+            user_checkout_id = self.request.session.get("user_checkout_id")
+            user_checkout = UserCheckout.objects.get(id=user_checkout_id)
+            if not user_checkout:
+                user_checkout = UserCheckout.objects.get(user=request.user)
+        except:
+            user_checkout = None
+
+        obj = self.get_object()
+        if obj.user == user_checkout or user_checkout != None:
+            return super(OrderDetail, self).dispatch(request, *args, **kwargs)
+        else:
+            messages.warning(request, "You need to continue as guest or sign in to see your previous order details..")
+            raise Http404
+
+
+
 class OrderList(LoginRequiredMixin, ListView):
     queryset = Order.objects.all()
 

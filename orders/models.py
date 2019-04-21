@@ -55,7 +55,7 @@ class Order(models.Model):
     # order_id
 
     def __str__(self):
-        return str(self.cart.id)
+        return str(self.id)
 
     def mark_completed(self):
         self.status = 'completed'

@@ -216,7 +216,7 @@ class CheckoutView(CartOrderMixin, FormMixin, DetailView):
 
     def get(self, request, *args, **kwargs):
         # take data from user address form and  feed to the order instance and save.
-        get_data = super(CheckoutView, self).get(request, *args, **kwargs)
+
 
         cart = self.get_cart()
         if cart == None:
@@ -231,7 +231,7 @@ class CheckoutView(CartOrderMixin, FormMixin, DetailView):
             new_order.user = user_checkout
             new_order.save()
 
-        return get_data
+        return super(CheckoutView, self).get(request, *args, **kwargs)
 
 
     def get_success_url(self):
@@ -250,7 +250,8 @@ class CheckoutFinalView(CartOrderMixin, View):
             order.mark_completed()
             del request.session["cart_id"]
             del request.session["new_order_id"]
-        return redirect('checkout')
+            messages.success(request, "Thank you for your order.")
+        return redirect('order_detail', pk=order.pk)
 
     def get(self, request, *args, **kwargs):
         return redirect('checkout')

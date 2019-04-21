@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "navbar.html" %}
+<div class="row mt-5">
+  <div class="col-sm-6 offset-sm-3">
+
+    <div class="card">
+      <div class="card-header">
+        <p class="lead">Order Summary</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        {% include "orders/order_summery.html" with order=object %}
+      </ul>
+    </div>
+
+  </div>
+</div>
+{% endblock content %}

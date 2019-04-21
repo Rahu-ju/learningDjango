@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
+{% load bootstrap4 %}
 {% block content %}
   {% include 'navbar.html' %}
   <div class="jumbotron">
-    <p>Sorry the page is not found..</p>
+    <p class="lead">Please follow the mesaage. As we take responsibility to secure your information.Thank you.</p>
+    {% bootstrap_messages %}
+
   </div>
 {% endblock content %}

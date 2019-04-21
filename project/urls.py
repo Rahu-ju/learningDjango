@@ -20,7 +20,7 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 
 from carts.views import CartView, CartItemCountView, CheckoutView, CheckoutFinalView
-from orders.views import AddressSelectFormView, AddressCreateView, OrderList
+from orders.views import AddressSelectFormView, AddressCreateView, OrderList, OrderDetail
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,7 +29,7 @@ urlpatterns = [
     # Home page
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     # user app
-    path('accounts/', include('users.urls')),
+    path('user/', include('users.urls')),
     # Product app
     path('product/', include('products.urls')),
     path('category/', include('products.urls_category')),
@@ -42,6 +42,7 @@ urlpatterns = [
     path('order/address/', AddressSelectFormView.as_view(), name='address_select'),
     path('order/address/add/', AddressCreateView.as_view(), name='address_create'),
     path('order/list/', OrderList.as_view(), name='order_list'),
+    path('order/detail/<int:pk>/', OrderDetail.as_view(), name='order_detail'),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
