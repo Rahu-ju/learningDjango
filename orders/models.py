@@ -1,20 +1,45 @@
 from decimal import Decimal
 
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.conf import settings
 
 from carts.models import Cart
+
+import braintree
+
+
+
+gateway = braintree.BraintreeGateway(
+  braintree.Configuration(
+    environment=braintree.Environment.Sandbox,
+    merchant_id='f72wh34twz7fhhxy',
+    public_key='64t3m76x64dggjd3',
+    private_key='832f5af6a971c8df1cec47792dfab0f8'
+  )
+)
 
 #User checkout model
 class UserCheckout(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True) #optional as it also used by guest user
     email = models.EmailField(unique=True)
+    braintree_id = models.CharField(max_length=120, blank=True, null=True)
 
     # merchant_id
 
     def __str__(self):
         return self.email
+
+def update_braintree_id(sender, instance, *args, **kwargs):
+    if not instance.braintree_id:
+        result = gateway.customer.create({
+            "email": "jen@example.com",
+        })
+        if result.is_success:
+            print(result.customer.id)
+            instance.braintree_id = result.customer.id
+            instance.save()
+post_save.connect(update_braintree_id, sender=UserCheckout)
 
 
 # User address model.
