@@ -30,15 +30,27 @@ class UserCheckout(models.Model):
     def __str__(self):
         return self.email
 
-def update_braintree_id(sender, instance, *args, **kwargs):
-    if not instance.braintree_id:
-        result = gateway.customer.create({
-            "email": "jen@example.com",
+    # Braintree functionality
+    @property
+    def get_customer_braintree_id(self):
+        instance = self
+        if not instance.braintree_id:
+            result = gateway.customer.create({
+                "email": instance.email
+            })
+            if result.is_success:
+                instance.braintree_id = result.customer.id
+                instance.save()
+        return instance.braintree_id
+
+    def get_client_token(self):
+        client_token = gateway.client_token.generate({
+            "customer_id": self.get_customer_braintree_id
         })
-        if result.is_success:
-            print(result.customer.id)
-            instance.braintree_id = result.customer.id
-            instance.save()
+        return client_token
+
+def update_braintree_id(sender, instance, *args, **kwargs):
+    instance.get_customer_braintree_id
 post_save.connect(update_braintree_id, sender=UserCheckout)
 
 

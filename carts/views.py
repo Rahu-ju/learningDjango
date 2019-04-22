@@ -178,7 +178,9 @@ class CheckoutView(CartOrderMixin, FormMixin, DetailView):
             user_checkout.user = self.request.user
             user_checkout.save()
             self.request.session["user_checkout_id"] = user_checkout.id
+            context["client_token"] = user_checkout.get_client_token
             user_can_continue = True
+
         elif not self.request.user.is_authenticated and user_checkout_id == None:
             context["login_form"] = AuthenticationForm()
             # build Absolute url for this view and feed to the context dict
@@ -188,6 +190,9 @@ class CheckoutView(CartOrderMixin, FormMixin, DetailView):
             pass
         if user_checkout_id != None:
             user_can_continue = True
+            if not self.request.user.is_authenticated:
+                user_checkout2 = UserCheckout.objects.get(id=user_checkout_id)
+                context["client_token"] = user_checkout2.get_client_token
 
         context["user_can_continue"] = user_can_continue
         # Feeding order instance
