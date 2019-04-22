@@ -1,3 +1,5 @@
+import braintree
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.http import HttpResponseRedirect, JsonResponse, Http404
@@ -6,12 +8,26 @@ from django.views.generic.detail import SingleObjectMixin, DetailView
 from django.views.generic.edit import FormMixin
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
+from django.conf import settings
 
 from products.models import Variation
 from .models import Cart, CartItem
 from orders.forms import GuestCheckoutForm
 from orders.models import UserCheckout, UserAddress, Order
 from orders.mixin import CartOrderMixin
+
+
+# braintree ids
+if settings.DEBUG:
+    gateway = braintree.BraintreeGateway(
+      braintree.Configuration(
+        environment=braintree.Environment.Sandbox,
+        merchant_id=settings.BRAINTREE_MERCHAND,
+        public_key=settings.BRAINTREE_PUBLIC,
+        private_key=settings.BRAINTREE_PRIVATE
+      )
+    )
+
 
 # Create your views here.
 class CartItemCountView(View):
@@ -245,18 +261,36 @@ class CheckoutView(CartOrderMixin, FormMixin, DetailView):
 
 class CheckoutFinalView(CartOrderMixin, View):
     def post(self, request, *args, **kwargs):
-        """ As the form submitted, It's save the order status as completed,
+        """ As the payment form submitted it run the transaction process and
+            It's save the order status as completed,
             delete cart_id, new_order_id from session and then redirect to
-            the CheckoutView, it's redirect to the CartView as the cart_id doesn't
-            exist.
+            order detail view otherwise in the checkout view.
         """
+        print(request.POST)
         order = self.get_order()
-        if request.POST.get("payment_token") == "abc":
-            order.mark_completed()
-            del request.session["cart_id"]
-            del request.session["new_order_id"]
-            messages.success(request, "Thank you for your order.")
+        order_total = order.order_total
+        nonce = request.POST.get("payment_method_nonce")
+        if nonce:
+            result = gateway.transaction.sale({
+                "amount": order_total,
+                "payment_method_nonce": nonce,
+                "options": {
+                    "submit_for_settlement": True
+                }
+            })
+
+            if result.is_success:
+                # See result.transaction for details
+                order.mark_completed()
+                del request.session["cart_id"]
+                del request.session["new_order_id"]
+            else:
+                # Handle errors
+                messages.success(request, "%s" % (result.message))
+                return redirect('checkout')
+        messages.success(request, "Thank you for your order..")
         return redirect('order_detail', pk=order.pk)
+
 
     def get(self, request, *args, **kwargs):
         return redirect('checkout')

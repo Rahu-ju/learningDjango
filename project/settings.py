@@ -157,3 +157,9 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'squalporeover.ju@gmail.com'
 EMAIL_HOST_PASSWORD = 'google.ju@1'
 EMAIL_PORT = 587
+
+# Braintre payments details
+BRAINTREE_ENVIRONMENT = 'Sandbox'
+BRAINTREE_MERCHAND = 'f72wh34twz7fhhxy'
+BRAINTREE_PUBLIC = '64t3m76x64dggjd3'
+BRAINTREE_PRIVATE = '832f5af6a971c8df1cec47792dfab0f8'

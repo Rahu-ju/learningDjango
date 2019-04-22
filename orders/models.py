@@ -1,23 +1,25 @@
 from decimal import Decimal
 
+import braintree
+
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.conf import settings
 
 from carts.models import Cart
 
-import braintree
+
+if settings.DEBUG:
+    gateway = braintree.BraintreeGateway(
+      braintree.Configuration(
+        environment=braintree.Environment.Sandbox,
+        merchant_id= settings.BRAINTREE_MERCHAND,
+        public_key= settings.BRAINTREE_PUBLIC,
+        private_key=settings.BRAINTREE_PRIVATE
+      )
+    )
 
 
-
-gateway = braintree.BraintreeGateway(
-  braintree.Configuration(
-    environment=braintree.Environment.Sandbox,
-    merchant_id='f72wh34twz7fhhxy',
-    public_key='64t3m76x64dggjd3',
-    private_key='832f5af6a971c8df1cec47792dfab0f8'
-  )
-)
 
 #User checkout model
 class UserCheckout(models.Model):
@@ -33,6 +35,8 @@ class UserCheckout(models.Model):
     # Braintree functionality
     @property
     def get_customer_braintree_id(self):
+        # its create customer braintree  account and
+        # return that customer id and save it to the database.
         instance = self
         if not instance.braintree_id:
             result = gateway.customer.create({
@@ -43,6 +47,7 @@ class UserCheckout(models.Model):
                 instance.save()
         return instance.braintree_id
 
+    # Using customer id it generate client token and retur that.
     def get_client_token(self):
         client_token = gateway.client_token.generate({
             "customer_id": self.get_customer_braintree_id

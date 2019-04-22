@@ -1,9 +1,10 @@
 {% extends "base.html" %}
+{% load bootstrap4 %}
 {% block content %}
 {% include "navbar.html" %}
 <div class="row mt-5">
   <div class="col-sm-6 offset-sm-3">
-
+    {% bootstrap_messages %}
     <div class="card">
       <div class="card-header">
         <p class="lead">Order Summary</p>
