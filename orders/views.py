@@ -45,15 +45,15 @@ class OrderList(LoginRequiredMixin, ListView):
         return super(OrderList, self).get_queryset().filter(user=user_checkout)
 
 
-class AddressCreateView(CreateView):
+class AddressCreateView(CartOrderMixin, CreateView):
     form_class = AddressCreateForm
     template_name = "orders/address_create.html"
-    success_url = "/order/address/"
+    success_url = "/order/address/" # To the AddressSelectFormView
 
-    def get_checkout_user(self):
-        user_checkout_id = self.request.session.get("user_checkout_id")
-        user_checkout = UserCheckout.objects.get(id=user_checkout_id)
-        return user_checkout
+    # def get_checkout_user(self):
+    #     user_checkout_id = self.request.session.get("user_checkout_id")
+    #     user_checkout = UserCheckout.objects.get(id=user_checkout_id)
+    #     return user_checkout
 
     def form_valid(self, form, *args, **kwargs):
         form.instance.user = self.get_checkout_user()
@@ -75,14 +75,14 @@ class AddressSelectFormView(CartOrderMixin, FormView):
         return super(AddressSelectFormView, self).dispatch(*args, **kwargs)
 
     def get_addresses(self):
-        user_checkout_id = self.request.session.get("user_checkout_id")
-        user_checkout = UserCheckout.objects.get(id=user_checkout_id)
+        # user_checkout_id = self.request.session.get("user_checkout_id")
+        # user_checkout = UserCheckout.objects.get(id=user_checkout_id)
         b_address = UserAddress.objects.filter(
-            user = user_checkout,
+            user = self.get_checkout_user(),
             type = 'billing'
         )
         s_address = UserAddress.objects.filter(
-            user = user_checkout,
+            user = self.get_checkout_user(),
             type = 'shipping'
         )
         return b_address, s_address

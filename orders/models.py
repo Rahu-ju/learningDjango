@@ -82,7 +82,7 @@ class UserAddress(models.Model):
 
 # Order model
 ORDER_STATUS_CHOICES = (
-    ('completed', 'Completed'),
+    ('paid', 'Paid'),
     ('created', 'Created')
 )
 
@@ -94,13 +94,15 @@ class Order(models.Model):
     shipping_address = models.ForeignKey(UserAddress, on_delete=models.CASCADE,related_name="shipping_address", null=True)
     shipping_total_price = models.DecimalField(max_digits=50, decimal_places=2, default=5)
     order_total = models.DecimalField(max_digits=50, decimal_places=2)
-    # order_id
+    order_id = models.CharField(max_length=20, blank=True, null=True)
 
     def __str__(self):
         return str(self.id)
 
-    def mark_completed(self):
-        self.status = 'completed'
+    def mark_completed(self, order_id=None):
+        self.status = 'paid'
+        if order_id and not self.order_id:
+            self.order_id = order_id
         self.save()
 
 # Calculate the order total before save the order model.

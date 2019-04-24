@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
 from carts.models import Cart
-from .models import Order
+from .models import Order, UserCheckout
 
 
 class CartOrderMixin:
@@ -35,6 +35,16 @@ class CartOrderMixin:
             return new_order
         new_order = Order.objects.get(id=new_order_id)
         return new_order
+
+    # Return usercheckout
+    def get_checkout_user(self):
+
+        user_checkout_id = self.request.session.get("user_checkout_id")
+        if user_checkout_id:
+            user_checkout = UserCheckout.objects.get(id=user_checkout_id)
+        else:
+            user_checkout = None
+        return user_checkout
 
 
 
