@@ -246,8 +246,7 @@ $(function () {
         margin: 0,
         smartSpeed: 500,
         responsiveClass: true,
-        // navText: ['<img src="' + basePath + 'img/prev-dark.48b8fa7c.svg" alt="" width="50">', '<img src="' + basePath + 'img/next-dark.6fd7cbeb.svg" alt="" width="50">'],
-        navText: ['<img src="{% static "img/prev-dark.48b8fa7c.svg" %}" alt="" width="50">', '<img src="{% static "img/next-dark.6fd7cbeb.svg" %}" alt="" width="50">'],
+        navText: ['<img src="' + basePath + 'img/prev-dark.48b8fa7c.svg" alt="" width="50">', '<img src="' + basePath + 'img/next-dark.6fd7cbeb.svg" alt="" width="50">'],
         responsive: {
             0: {
                 items: 1,
@@ -289,8 +288,7 @@ $(function () {
         margin: 0,
         smartSpeed: 500,
         responsiveClass: true,
-        // navText: ['<img src="' + basePath + 'img/prev.3bd24274.svg" alt="" width="50">', '<img src="' + basePath + 'img/next.ef15fe32.svg" alt="" width="50">'],
-        navText: ['<img src="{% static 'img/prev-dark.48b8fa7c.svg' %}" alt="" width="50">', '<img src="{% static 'img/next-dark.6fd7cbeb.svg' %}" alt="" width="50">'],
+        navText: ['<img src="' + basePath + 'img/prev.3bd24274.svg" alt="" width="50">', '<img src="' + basePath + 'img/next.ef15fe32.svg" alt="" width="50">'],
         responsive: {
             0: {
                 items: 1,
@@ -334,8 +332,7 @@ $(function () {
         margin: 0,
         smartSpeed: 500,
         responsiveClass: true,
-        // navText: ['<img src="' + basePath + 'img/prev.3bd24274.svg" alt="" width="50">', '<img src="' + basePath + 'img/next.ef15fe32.svg" alt="" width="50">'],
-        navText: ['<img src="{% static 'img/prev.3bd24274.svg' %}" alt="" width="50">', '<img src="{% static 'img/next.ef15fe32.svg' %}" alt="" width="50">'],
+        navText: ['<img src="' + basePath + 'img/prev.3bd24274.svg" alt="" width="50">', '<img src="' + basePath + 'img/next.ef15fe32.svg" alt="" width="50">'],
         responsive: {
             0: {
                 items: 1,
@@ -378,8 +375,7 @@ $(function () {
         margin: 0,
         nav: false,
         dots: true,
-        // navText: ['<img src="' + basePath + 'img/prev.3bd24274.svg" alt="" width="50">', '<img src="' + basePath + 'img/next.ef15fe32.svg" alt="" width="50">'],
-        navText: ['<img src="{% static 'img/prev.3bd24274.svg' %}" alt="" width="50">', '<img src="{% static 'img/next-dark.6fd7cbeb.svg' %}" alt="" width="50">'],
+        navText: ['<img src="' + basePath + 'img/prev.3bd24274.svg" alt="" width="50">', '<img src="' + basePath + 'img/next.ef15fe32.svg" alt="" width="50">'],
         smartSpeed: 400,
         responsiveClass: true,
         responsive: {

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     # Local apps 
     'products.apps.ProductsConfig',
+    'carts.apps.CartsConfig',
 ]
 
 MIDDLEWARE = [
@@ -126,5 +127,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL ='/media/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static/media')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_cdn')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static_cdn/media')
