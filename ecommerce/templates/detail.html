@@ -44,58 +44,50 @@
               <p class="mb-4 text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco</p>
               <form action="#">
                 <div class="row">
-                  <div class="col-sm-6 col-lg-12 detail-option mb-3">
-                    <h6 class="detail-option-heading">Size <span>(required)</span></h6>
-                    <label for="size_0" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
-                       
-                      Small
-                      <input type="radio" name="size" value="value_0" id="size_0" required class="input-invisible">
-                    </label>
-                    <label for="size_1" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
-                       
-                      Medium
-                      <input type="radio" name="size" value="value_1" id="size_1" required class="input-invisible">
-                    </label>
-                    <label for="size_2" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
-                       
-                      Large
-                      <input type="radio" name="size" value="value_2" id="size_2" required class="input-invisible">
-                    </label>
-                  </div>
-                  <div class="col-sm-6 col-lg-12 detail-option mb-3">
-                    <h6 class="detail-option-heading">Type <span>(required)</span></h6>
-                    <label for="material_0" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
-                       
-                      Hoodie
-                      <input type="radio" name="material" value="value_0" id="material_0" required class="input-invisible">
-                    </label>
-                    <label for="material_1" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
-                       
-                      College
-                      <input type="radio" name="material" value="value_1" id="material_1" required class="input-invisible">
-                    </label>
-                  </div>
-                  <div class="col-12 detail-option mb-3">
-                    <h6 class="detail-option-heading">Colour <span>(required)</span></h6>
-                    <ul class="list-inline mb-0 colours-wrapper">
-                      <li class="list-inline-item">
-                        <label for="colour_Blue" style="background-color: #668cb9" class="btn-colour"> </label>
-                        <input type="radio" name="colour" value="value_Blue" id="colour_Blue" required class="input-invisible">
-                      </li>
-                      <li class="list-inline-item">
-                        <label for="colour_White" style="background-color: #fff" class="btn-colour"> </label>
-                        <input type="radio" name="colour" value="value_White" id="colour_White" required class="input-invisible">
-                      </li>
-                      <li class="list-inline-item">
-                        <label for="colour_Violet" style="background-color: #8b6ea4" class="btn-colour"> </label>
-                        <input type="radio" name="colour" value="value_Violet" id="colour_Violet" required class="input-invisible">
-                      </li>
-                      <li class="list-inline-item">
-                        <label for="colour_Red" style="background-color: #dd6265" class="btn-colour"> </label>
-                        <input type="radio" name="colour" value="value_Red" id="colour_Red" required class="input-invisible">
-                      </li>
-                    </ul>
-                  </div>
+                  {% comment %} if variation exist then it shows {% endcomment %}
+                  {% if product.variation_set.all %}
+
+                    {% if product.variation_set.sizes %}
+                      <div class="col-sm-6 col-lg-12 detail-option mb-3">
+                        <h6 class="detail-option-heading">Size <span>(required)</span></h6>
+
+                        {% for item in product.variation_set.sizes %}
+                          <label for="size_{{item.title}}" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
+                            {{ item.title }}
+                            <input type="radio" name="size" value="{{ item.title }}" id="size_{{item.title}}" required class="input-invisible">
+                          </label>
+                        {% endfor %}
+
+                      </div>
+                    {% endif %}
+                    
+                    <div class="col-sm-6 col-lg-12 detail-option mb-3">
+                      <h6 class="detail-option-heading">Type <span>(required)</span></h6>
+                      <label for="material_0" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
+                        
+                        Hoodie
+                        <input type="radio" name="material" value="value_0" id="material_0" required class="input-invisible">
+                      </label>
+                      <label for="material_1" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
+                        
+                        College
+                        <input type="radio" name="material" value="value_1" id="material_1" required class="input-invisible">
+                      </label>
+                    </div>
+                    {% if product.variation_set.colors %}
+                      <div class="col-12 detail-option mb-3">
+                        <h6 class="detail-option-heading">Colour <span>(required)</span></h6>
+                        <ul class="list-inline mb-0 colours-wrapper">
+                          {% for item in product.variation_set.colors %}
+                            <li class="list-inline-item">
+                              <label for="colour_{{item.title}}" style="background-color: {{ item.title }}" class="btn-colour"> </label>
+                              <input type="radio" name="colour" value="{{ item.title }}" id="colour_{{item.title}}" required class="input-invisible">
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                    {% endif %}
+                  {% endif %}
                   <div class="col-12 col-lg-6 detail-option mb-5">
                     <label class="detail-option-heading font-weight-bold">Items <span>(required)</span></label>
                     <input name="items" type="number" value="1" class="form-control detail-quantity">

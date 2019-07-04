@@ -13,12 +13,19 @@
         <div class="hero-content pb-5 text-center">
           <h1 class="hero-heading">Shopping cart</h1>
           <div class="row">   
-            <div class="col-xl-8 offset-xl-2"><p class="lead text-muted">You have 3 items in your shopping cart</p></div>
+            <div class="col-xl-8 offset-xl-2">
+              {% if empty %}
+                <p class="lead text-muted">Your shopping cart is empty.</p>
+              {% else %}
+                <p class="lead text-muted">You have 3 items in your shopping cart</p>
+              {% endif %}
+            </div>
           </div>
         </div>
       </div>
     </section>
     <!-- Shopping Cart Section-->
+    {% if not empty %}
     <section>
       <div class="container">
         <div class="row mb-5"> 
@@ -36,17 +43,17 @@
                 </div>
                 <div class="cart-body">
                 {% comment %} Showing all the cart items {% endcomment %}
-                {% for item in cart.products.all %}
+                {% for item in cart.cartitem_set.all %}
                   <!-- Product-->
                   <div class="cart-item">
                     <div class="row d-flex align-items-center text-center">
                       <div class="col-5">
-                        <div class="d-flex align-items-center"><a href="detail.html"><img src="../../../d19m59y37dris4.cloudfront.net/sell/1-2-5/img/product/product-square-ian-dooley-347968-unsplash.79aa09aa.jpg" alt="..." class="cart-item-img"></a>
-                          <div class="cart-title text-left"><a href="detail.html" class="text-uppercase text-dark"><strong>{{ item.title }}</strong></a><br><span class="text-muted text-sm">Size: Large</span><br><span class="text-muted text-sm">Colour: Green</span>
+                        <div class="d-flex align-items-center"><a href="detail.html"><img src="{{item.product.get_image_url }}" alt="..." class="cart-item-img"></a>
+                          <div class="cart-title text-left"><a href="detail.html" class="text-uppercase text-dark"><strong>{{ item.product.title }}</strong></a><br><span class="text-muted text-sm">Size: Large</span><br><span class="text-muted text-sm">Colour: Green</span>
                           </div>
                         </div>
                       </div>
-                      <div class="col-2">{{ item.price }}</div>
+                      <div class="col-2">{{ item.product.price }}</div>
                       <div class="col-2">
                         <div class="d-flex align-items-center">
                           <div class="btn btn-items btn-items-decrease">-</div>
@@ -55,7 +62,7 @@
                         </div>
                       </div>
                       <div class="col-2 text-center">$260.00</div>
-                      <div class="col-1 text-center"><a href="{% url 'cart_update' item.slug %}" class="cart-remove"> <i class="fa fa-times"></i></a></div>
+                      <div class="col-1 text-center"><a href="{% url 'cart_update' item.product.slug %}" class="cart-remove"> <i class="fa fa-times"></i></a></div>
                     </div>
                   </div>
                   <!-- Product-->
@@ -125,5 +132,6 @@
         </div>
       </div>
     </section>
+  {% endif %}
 {% endblock content %}
    
