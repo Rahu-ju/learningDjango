@@ -42,51 +42,55 @@
                 </div>
               </div>
               <p class="mb-4 text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco</p>
-              <form action="#">
+              <form action="{% url 'cart_update' product.slug %}" method='POST'>
+                {% csrf_token %}
                 <div class="row">
                   {% comment %} if variation exist then it shows {% endcomment %}
-                  {% if product.variation_set.all %}
-
-                    {% if product.variation_set.sizes %}
+                  {% if items %}
+                      {% comment %} product sizes {% endcomment %}
+                      {% if sizes %}
                       <div class="col-sm-6 col-lg-12 detail-option mb-3">
                         <h6 class="detail-option-heading">Size <span>(required)</span></h6>
 
-                        {% for item in product.variation_set.sizes %}
-                          <label for="size_{{item.title}}" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
-                            {{ item.title }}
-                            <input type="radio" name="size" value="{{ item.title }}" id="size_{{item.title}}" required class="input-invisible">
+                        {% for size in sizes %}
+                          <label for="size_{{size}}" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
+                            {{ size }}
+                            <input type="radio" name="size" value="{{ size }}" id="size_{{size}}" required class="input-invisible">
                           </label>
                         {% endfor %}
 
                       </div>
+                      {% endif %}
+                    {% comment %} product types {% endcomment %}
+                    {% if types %}
+                      <div class="col-sm-6 col-lg-12 detail-option mb-3">
+                        <h6 class="detail-option-heading">Type <span>(required)</span></h6>
+                        {% for type in types %}
+                          
+                            <label for="material_{{type}}" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
+                              {{type}}
+                              <input type="radio" name="type" value="{{type}}" id="material_{{type}}" required class="input-invisible">
+                            </label>
+                          
+                        {% endfor %}
+                      </div>
                     {% endif %}
-                    
-                    <div class="col-sm-6 col-lg-12 detail-option mb-3">
-                      <h6 class="detail-option-heading">Type <span>(required)</span></h6>
-                      <label for="material_0" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
-                        
-                        Hoodie
-                        <input type="radio" name="material" value="value_0" id="material_0" required class="input-invisible">
-                      </label>
-                      <label for="material_1" class="btn btn-sm btn-outline-secondary detail-option-btn-label">
-                        
-                        College
-                        <input type="radio" name="material" value="value_1" id="material_1" required class="input-invisible">
-                      </label>
-                    </div>
-                    {% if product.variation_set.colors %}
+
+                      {% comment %} product colors {% endcomment %}
+                      {% if colors %}
                       <div class="col-12 detail-option mb-3">
                         <h6 class="detail-option-heading">Colour <span>(required)</span></h6>
                         <ul class="list-inline mb-0 colours-wrapper">
-                          {% for item in product.variation_set.colors %}
+                          {% for color in colors %}
                             <li class="list-inline-item">
-                              <label for="colour_{{item.title}}" style="background-color: {{ item.title }}" class="btn-colour"> </label>
-                              <input type="radio" name="colour" value="{{ item.title }}" id="colour_{{item.title}}" required class="input-invisible">
+                              <label for="colour_{{color}}" style="background-color: {{ color }}" class="btn-colour"> </label>
+                              <input type="radio" name="color" value="{{ color }}" id="colour_{{color}}" required class="input-invisible">
                             </li>
                           {% endfor %}
                         </ul>
                       </div>
-                    {% endif %}
+                      {% endif %}
+                    
                   {% endif %}
                   <div class="col-12 col-lg-6 detail-option mb-5">
                     <label class="detail-option-heading font-weight-bold">Items <span>(required)</span></label>

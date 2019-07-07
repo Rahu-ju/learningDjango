@@ -50,21 +50,25 @@ def update_cart(request, slug):
     cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
     
     # update quantity, price
-    try:
-        qty = request.GET.get('qty')
-        if qty == 0:
-            cart_item.delete()
-        else:
-            cart_item.quantity = qty
+    if request.method == 'POST':
+        size = request.POST.get('size')
+        type = request.POST.get('type')
+        color = request.POST.get('color')
+        items = request.POST.get('items')
+
+        if int(items) >= 0:
+            cart_item.size = size
+            cart_item.type = type
+            cart_item.color = color
+            cart_item.quantity = items
             cart_item.save()
-    except:
-        pass
+        else:
+            cart_item.delete()
 
     new_total = 0.00
     for item in cart.cartitem_set.all():
         line_total = float(item.product.price) * item.quantity
         new_total += line_total
-
     cart.total = new_total
     cart.save()
 

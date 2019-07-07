@@ -28,7 +28,24 @@ def detail(request, slug):
     # retrive the product(using slug) from the database
     try:
         product = Product.objects.get(slug=slug)
-        context = {'product': product }
+        items = product.variation_set.all()
+        sizes = []
+        types = []
+        colors = []
+        # taking all the feature of the product
+        for item in items:
+            if item.size:
+                sizes.append(item.size)
+            if item.type:
+                types.append(item.type)
+            if item.color:
+                colors.append(item.color)
+
+        context = {'product': product, 
+                    'items': items, 
+                    'sizes': sizes,
+                    'colors': colors,
+                    'types': types, }
         return render(request, template, context)
     except:
         raise Http404
